@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>รวมม็อดแปลไทยเกม VR By KaminKub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com/">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+      --container-bg: #1c2128;
+      --header-bg: linear-gradient(135deg, #1a5f7a 0%, #2d8bb3 100%);
+      --table-header-bg: linear-gradient(135deg, #1a5f7a 0%, #2d8bb3 100%);
+      --table-row-hover: #161b22;
+      --cell-border: #30363d;
+      --cell-text: #c9d1d9;
+      --link-color: #58a6ff;
+      --link-hover: #6cb6ff;
+      --status-finished: #39d353;
+      --status-finished-bg: rgba(57, 211, 83, 0.2);
+      --status-progress: #d29922;
+      --status-progress-bg: rgba(210, 153, 34, 0.2);
+      --status-pending: #8b949e;
+      --status-pending-bg: #21262d;
+      --status-review: #d29922;
+      --status-review-bg: rgba(210, 153, 34, 0.2);
+      --status-deleted: #f85149;
+      --status-deleted-bg: rgba(248, 81, 73, 0.2);
+      --footer-bg: #161b22;
+      --footer-text: #8b949e;
+      --footer-strong: #58a6ff;
+      --legend-text: #8b949e;
+      --legend-dot-finished: #39d353;
+      --legend-dot-progress: #d29922;
+      --legend-dot-pending: #30363d;
+      --legend-dot-review: #d29922;
+      --legend-dot-deleted: #f85149;
+    }
+
+    [data-theme="light"] {
+      --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+      --container-bg: #ffffff;
+      --header-bg: linear-gradient(135deg, #1565C0 0%, #42A5F5 100%);
+      --table-header-bg: linear-gradient(135deg, #1565C0 0%, #42A5F5 100%);
+      --table-row-hover: #f8fbff;
+      --cell-border: #f0f0f0;
+      --cell-text: #24292e;
+      --link-color: #0969da;
+      --link-hover: #117cfa;
+      --status-finished: #2e7d32;
+      --status-finished-bg: #e8f5e9;
+      --status-progress: #ef6c00;
+      --status-progress-bg: #fff3e0;
+      --status-pending: #616161;
+      --status-pending-bg: #e0e0e0;
+      --status-review: #f9a825;
+      --status-review-bg: #fff8e1;
+      --status-deleted: #c62828;
+      --status-deleted-bg: #ffebee;
+      --footer-bg: #f8fafc;
+      --footer-text: #5f6368;
+      --footer-strong: #1565C0;
+      --legend-text: #5f6368;
+      --legend-dot-finished: #e8f5e9;
+      --legend-dot-progress: #fff3e0;
+      --legend-dot-pending: #e0e0e0;
+      --legend-dot-review: #fff8e1;
+      --legend-dot-deleted: #ffebee;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Kanit', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-gradient);
+      min-height: 100vh;
+      padding: 20px;
+      color: var(--cell-text);
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: var(--container-bg);
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+      transition: background 0.3s ease;
+    }
+
+    .header {
+      background: var(--header-bg);
+      color: #fff;
+      padding: 24px 32px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .header p {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      padding: 12px 0;
+      flex-wrap: wrap;
+    }
+
+    /* สไตล์ปุ่ม Header */
+    .header-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      white-space: nowrap;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(10px);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.2) 100%);
+    }
+
+    /* แก้ไขขนาด Icon และ อีโมจิ */
+    .header-btn span.icon {
+      font-size: 30px; /* ปรับขนาดอีโมจิเป็น 30px */
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .header-btn img.icon-img {
+      width: 30px;   /* ปรับขนาดรูปภาพเป็น 30px */
+      height: 30px;
+      object-fit: contain;
+    }
+
+    .header-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+    }
+
+    .donate-btn {
+      background: linear-gradient(135deg, rgba(255, 165, 2, 0.15) 0%, rgba(255, 165, 2, 0.25) 100%);
+      color: #ff9800;
+      border-color: rgba(255, 165, 2, 0.3);
+    }
+
+    /* แก้ไขตำแหน่ง Dropdown ให้มาอยู่ใต้ปุ่ม */
+    .donate-wrapper {
+      position: relative; /* สำคัญ: เพื่อให้ dropdown อ้างอิงตำแหน่งจากจุดนี้ */
+    }
+
+    .donate-dropdown {
+      position: absolute;
+      top: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--container-bg);
+      border: 1px solid var(--cell-border);
+      border-radius: 12px;
+      padding: 10px;
+      min-width: 190px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      z-index: 200;
+    }
+
+    .donate-dropdown.show {
+      display: flex;
+    }
+
+    .donate-dropdown a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--cell-text);
+      font-size: 13px;
+      transition: all 0.2s ease;
+    }
+
+    .donate-dropdown a:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateX(4px);
+    }
+
+    .donate-dropdown a img {
+      width: 20px;
+      height: 20px;
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      z-index: 100;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      padding: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      min-width: 1100px;
+    }
+
+    thead {
+      background: var(--table-header-bg);
+      color: #fff;
+    }
+
+    th {
+      padding: 14px 16px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    th:first-child { border-top-left-radius: 10px; }
+    th:last-child { border-top-right-radius: 10px; }
+
+    td {
+      padding: 14px 16px;
+      font-size: 14px;
+      border-bottom: 1px solid var(--cell-border);
+      color: var(--cell-text);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      min-width: 120px;
+      justify-content: center;
+    }
+
+    .status-badge.finished { background: var(--status-finished-bg); color: var(--status-finished); border: 1px solid rgba(57,211,83,0.3); }
+    .status-badge.in-progress { background: var(--status-progress-bg); color: var(--status-progress); border: 1px solid rgba(210,153,34,0.3); }
+    .status-badge.pending { background: var(--status-pending-bg); color: var(--status-pending); border: 1px solid rgba(139,148,158,0.3); }
+    .status-badge.review { background: var(--status-review-bg); color: var(--status-review); border: 1px solid rgba(210,153,34,0.3); }
+    .status-badge.deleted { background: var(--status-deleted-bg); color: var(--status-deleted); border: 1px solid rgba(248,81,73,0.3); }
+
+    .download-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      background: rgba(88, 166, 255, 0.1);
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--link-color);
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .download-link:hover {
+      background: var(--link-hover);
+      color: #fff;
+    }
+
+    .footer {
+      background: var(--footer-bg);
+      padding: 16px 32px;
+      border-top: 1px solid var(--cell-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .legend { display: flex; gap: 16px; flex-wrap: wrap; }
+    .legend-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--legend-text); }
+    .legend-dot { width: 12px; height: 12px; border-radius: 50%; }
+
+    /* ปิดการแสดงผล div เปล่าที่ทำให้เกิดแถบแปลกปลอม */
+    #mod-list {
+      display: none; 
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>📋 รวมม็อดแปลไทยเกม VR</h1>
+      <p>ตารางเพื่อติดตามสถานะการแปลไทยเกม VR และอื่นๆ By KaminKub</p>
+    </div>
+
+    <div class="button-container">
+      <a href="https://www.openlink.co/KaminKub" class="header-btn" target="_blank">
+        <span class="icon">📣</span>
+        ติดตามผลงาน
+      </a>
+
+      <div class="donate-wrapper">
+        <div class="header-btn donate-btn" id="donateBtn" onclick="toggleDonate()">
+          <img src="coffee.png" class="icon-img" alt="Coffee">
+          เลี้ยงกาแฟผม
+        </div>
+        <div class="donate-dropdown" id="donateDropdown">
+          <a href="https://easydonate.app/kaminkub" target="_blank">
+            <img src="./mod-tracking-table_files/favicon.png" alt="">
+            เลี้ยงผ่าน EasyDonate
+          </a>
+          <a href="https://tipme.in.th/kaminkub" target="_blank">
+            <img src="./mod-tracking-table_files/tipmme.png" alt="">
+            เลี้ยงผ่าน TipMe
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+
+    <div class="table-container">
+      <table id="main-mod-table">
+        <thead>
+          <tr>
+            <th>ลำดับ</th>
+            <th>สถานะแปล</th>
+            <th>ชื่อเกม</th>
+            <th>ลิงก์ดาวน์โหลด</th>
+            <th>ผู้แปล</th>
+            <th>วันที่อัปเดต</th>
+            <th>หมายเหตุ</th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+          <tr><td colspan="7" style="text-align:center;">กำลังโหลดข้อมูลจากคลังม็อด...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="footer">
+      <div id="stats-container" style="display: flex; gap: 24px;">
+         </div>
+      <div class="legend">
+        <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-finished);"></span>แปลเสร็จแล้ว</div>
+        <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-progress);"></span>กำลังแปล</div>
+        <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-pending);"></span>รอแปล</div>
+        <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-review);"></span>รอ Review</div>
+        <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-deleted);"></span>ลบออกแล้ว</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleTheme() {
+      const body = document.body;
+      const toggleBtn = document.querySelector('.theme-toggle');
+      if (body.getAttribute('data-theme') === 'light') {
+        body.removeAttribute('data-theme');
+        toggleBtn.textContent = '🌙';
+      } else {
+        body.setAttribute('data-theme', 'light');
+        toggleBtn.textContent = '☀️';
+      }
+    }
+
+    function toggleDonate() {
+      const dropdown = document.getElementById('donateDropdown');
+      dropdown.classList.toggle('show');
+    }
+
+    // ปิด dropdown เมื่อคลิกข้างนอก
+    window.onclick = function(event) {
+      if (!event.target.matches('.donate-btn') && !event.target.closest('.donate-btn')) {
+        const dropdown = document.getElementById('donateDropdown');
+        if (dropdown.classList.contains('show')) dropdown.classList.remove('show');
+      }
+    }
+
+    // ฟังก์ชันช่วยเลือก Class ของ Badge ตามข้อความสถานะ
+    function getStatusClass(status) {
+      if (status.includes("เสร็จ")) return "finished";
+      if (status.includes("กำลัง")) return "in-progress";
+      if (status.includes("รอแปล")) return "pending";
+      if (status.includes("Review")) return "review";
+      if (status.includes("ลบ")) return "deleted";
+      return "pending";
+    }
+
+    // ดึงข้อมูลจาก Google Sheets API (Web App)
+    const url = 'https://script.google.com/macros/s/AKfycbz_aw9IF7u9D-2G5q8ppHT_K-kNRhO4HTXWUEU5PGOz-7uDAn2OmVmiS6MZGiFd2duh/exec';
+    
+    function formatDate(dateString) {
+      if (!dateString || dateString === '-') return '-';
+      const date = new Date(dateString);
+      if (isNaN(date)) return dateString; // ถ้าไม่ใช่รูปแบบวันที่ให้คืนค่าเดิม
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      return `${day}-${month}-${year}`;
+    }
+    async function loadMods() {
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        const tbody = document.getElementById('table-body');
+        let html = '';
+        let countFinished = 0;
+        let countProgress = 0;
+
+        for(let i = 1; i < data.length; i++) {
+          const status = data[i][1];
+          const statusClass = getStatusClass(status);
+          
+          if(statusClass === "finished") countFinished++;
+          if(statusClass === "in-progress") countProgress++;
+
+          html += `
+            <tr>
+              <td class="order-cell">${i}</td>
+              <td><span class="status-badge ${statusClass}">${status}</span></td>
+              <td><span class="game-name">${data[i][2]}</span></td>
+              <td><a href="${data[i][3]}" class="download-link">${data[i][3] === '-' ? '-' : 'ดาวน์โหลดม็อด'}</a></td>
+              <td><span class="translator">${data[i][4] || '-'}</span></td>
+              <td><span class="update-date">${formatDate(data[i][5])}</span></td>
+              <td><span class="notes">${data[i][6] || '-'}</span></td>
+            </tr>`;
+        }
+        tbody.innerHTML = html;
+
+        // อัปเดตสถิติใน Footer
+        document.getElementById('stats-container').innerHTML = `
+          <div class="footer-item"><span>📊</span> รวมเกมทั้งหมด: <strong>${data.length - 1} เกม</strong></div>
+          <div class="footer-item"><span>✅</span> แปลเสร็จ: <strong>${countFinished} เกม</strong></div>
+          <div class="footer-item"><span>🔄</span> กำลังแปล: <strong>${countProgress} เกม</strong></div>
+        `;
+
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('table-body').innerHTML = '<tr><td colspan="7" style="color:red; text-align:center;">ไม่สามารถเชื่อมต่อข้อมูลจาก Google Sheets ได้</td></tr>';
+      }
+    }
+    
+    loadMods();
+  </script>
+</body>
+</html>
