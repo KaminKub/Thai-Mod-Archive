@@ -457,14 +457,13 @@
       <table id="main-mod-table">
         <thead>
           <tr>
-            <th>ลำดับ</th>
             <th>สถานะแปล</th>
             <th>ชื่อเกม</th>
-            <th>ลิงก์ดาวน์โหลด</th>
-            <th>ผู้แปล</th>
+            <th>ลิ้งม็อด</th>
+            <th>หน้าร้านเกม</th>
             <th>วันที่อัปเดต</th>
             <th>หมายเหตุ</th>
-            <th>หน้าร้านค้าเกม</th>
+            <th>ผู้แปล</th>
           </tr>
         </thead>
         <tbody id="table-body">
@@ -568,14 +567,13 @@
 
           html += `
             <tr>
-              <td class="order-cell">${i}</td>
               <td><span class="status-badge ${statusClass}">${status}</span></td>
               <td><span class="game-name">${data[i][2]}</span></td>
               <td>${downloadCell}</td>
-              <td><span class="translator">${data[i][4] || '-'}</span></td>
+              <td>${storeCell}</td>
               <td><span class="update-date">${formatDate(data[i][5])}</span></td>
               <td><span class="notes">${data[i][6] || '-'}</span></td>
-              <td>${storeCell}</td>
+              <td><span class="translator">${data[i][4] || '-'}</span></td>
             </tr>`;
         }
         tbody.innerHTML = html;
