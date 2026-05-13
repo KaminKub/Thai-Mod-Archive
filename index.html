@@ -7,11 +7,12 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://kaminkub.github.io/Thai-Mod-Archive/">
   <meta property="og:title" content="รวมม็อดแปลไทยเกม PCVR By KaminKub">
-  <meta property="og:description" content="เช็กสถานะการแปลและดาวน์โหลดม็อดภาษาไทยล่าสุดได้ที่นี่">
-  <meta property="og:image" content="https://kaminkub.github.io/Thai-Mod-Archive/logo.png"> <meta property="twitter:card" content="summary_large_image">
+  <meta property="og:description" content="เช็กสถานะการแปลและดาวน์โหลดม็อดภาษาไทยล่าสุดได้ที่นนี่">
+  <meta property="og:image" content="https://kaminkub.github.io/Thai-Mod-Archive/logo.png">
+  <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://kaminkub.github.io/Thai-Mod-Archive/">
   <meta property="twitter:title" content="รวมม็อดแปลไทยเกม PCVR By KaminKub">
-  <meta property="twitter:description" content="เช็กสถานะการแปลและดาวน์โหลดม็อดภาษาไทยล่าสุดได้ที่นี่">
+  <meta property="twitter:description" content="เช็กสถานะการแปลและดาวน์โหลดม็อดภาษาไทยล่าสุดได้ที่นนี่">
   <meta property="twitter:image" content="https://kaminkub.github.io/Thai-Mod-Archive/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com/">
   <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
@@ -51,8 +52,8 @@
     }
 
     [data-theme="light"] {
-      --btn-text: #000000;      /* โหมดสว่าง: ตัวหนังสือสีน้ำเงินเข้มเพื่อให้ตัดกับพื้นหลัง */
-      --btn-border: #000000;   /* โหมดสว่าง: ขอบสีดำชัดเจน */
+      --btn-text: #000000;
+      --btn-border: #000000;
       --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
       --container-bg: #ffffff;
       --header-bg: linear-gradient(135deg, #1565C0 0%, #42A5F5 100%);
@@ -135,7 +136,6 @@
       flex-wrap: wrap;
     }
 
-    /* สไตล์ปุ่ม Header */
     .header-btn {
       position: relative;
       display: inline-flex;
@@ -143,21 +143,25 @@
       gap: 8px;
       padding: 10px 18px;
       border-radius: 10px;
-      color: var(--btn-text);      /* เปลี่ยนจาก #fff เป็นตัวแปร */
+      color: var(--btn-text);
       font-size: 14px;
       font-weight: 500;
       text-decoration: none;
       transition: all 0.3s ease;
       cursor: pointer;
       white-space: nowrap;
-      border: 1.5px solid var(--btn-border); /* เปลี่ยนจาก #000 เป็นตัวแปร */
+      border: 1.5px solid var(--btn-border);
       backdrop-filter: blur(10px);
       background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.2) 100%);
     }
 
-    /* แก้ไขขนาด Icon และ อีโมจิ */
+    .header-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+    }
+
     .header-btn span.icon {
-      font-size: 30px; /* ปรับขนาดอีโมจิเป็น 30px */
+      font-size: 30px;
       width: 30px;
       height: 30px;
       display: flex;
@@ -166,14 +170,9 @@
     }
 
     .header-btn img.icon-img {
-      width: 30px;   /* ปรับขนาดรูปภาพเป็น 30px */
+      width: 30px;
       height: 30px;
       object-fit: contain;
-    }
-
-    .header-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
     }
 
     .donate-btn {
@@ -182,9 +181,8 @@
       border-color: rgba(255, 165, 2, 0.3);
     }
 
-    /* แก้ไขตำแหน่ง Dropdown ให้มาอยู่ใต้ปุ่ม */
     .donate-wrapper {
-      position: relative; /* สำคัญ: เพื่อให้ dropdown อ้างอิงตำแหน่งจากจุดนี้ */
+      position: relative;
     }
 
     .donate-dropdown {
@@ -251,6 +249,11 @@
       z-index: 100;
     }
 
+    .theme-toggle:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: rotate(15deg);
+    }
+
     .table-container {
       overflow-x: auto;
       padding: 20px;
@@ -260,7 +263,7 @@
       width: 100%;
       border-collapse: separate;
       border-spacing: 0;
-      min-width: 1100px;
+      min-width: 1150px;
     }
 
     thead {
@@ -324,6 +327,64 @@
       color: #fff;
     }
 
+    .download-link::before {
+      content: '⬇';
+      font-size: 14px;
+    }
+
+    .store-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: rgba(255, 0, 85, 0.15);
+      border-radius: 8px;
+      text-decoration: none;
+      color: #ff0055;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      border: 1px solid rgba(255, 0, 85, 0.3);
+    }
+
+    .store-link:hover {
+      background: #ff0055;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(255, 0, 85, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .store-link::before {
+      content: '🎮';
+      font-size: 14px;
+    }
+
+    .game-name {
+      color: var(--link-color);
+    }
+
+    .translator {
+      color: var(--footer-text);
+      font-size: 13px;
+    }
+
+    .update-date {
+      color: var(--footer-text);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .notes {
+      color: var(--footer-text);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .notes em {
+      color: #ff7b72;
+      font-style: italic;
+    }
+
     .footer {
       background: var(--footer-bg);
       padding: 16px 32px;
@@ -335,13 +396,24 @@
       gap: 16px;
     }
 
+    .footer-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--footer-text);
+    }
+
+    .footer-item strong {
+      color: var(--footer-strong);
+    }
+
     .legend { display: flex; gap: 16px; flex-wrap: wrap; }
     .legend-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--legend-text); }
     .legend-dot { width: 12px; height: 12px; border-radius: 50%; }
 
-    /* ปิดการแสดงผล div เปล่าที่ทำให้เกิดแถบแปลกปลอม */
     #mod-list {
-      display: none; 
+      display: none;
     }
   </style>
 </head>
@@ -389,10 +461,11 @@
             <th>ผู้แปล</th>
             <th>วันที่อัปเดต</th>
             <th>หมายเหตุ</th>
+            <th>หน้าร้านค้าเกม</th>
           </tr>
         </thead>
         <tbody id="table-body">
-          <tr><td colspan="7" style="text-align:left;">กำลังโหลดข้อมูลจากคลังม็อด...</td></tr>
+          <tr><td colspan="8" style="text-align:left;">กำลังโหลดข้อมูลจากคลังม็อด...</td></tr>
         </tbody>
       </table>
     </div>
@@ -428,7 +501,6 @@
       dropdown.classList.toggle('show');
     }
 
-    // ปิด dropdown เมื่อคลิกข้างนอก
     window.onclick = function(event) {
       if (!event.target.matches('.donate-btn') && !event.target.closest('.donate-btn')) {
         const dropdown = document.getElementById('donateDropdown');
@@ -436,7 +508,6 @@
       }
     }
 
-    // ฟังก์ชันช่วยเลือก Class ของ Badge ตามข้อความสถานะ
     function getStatusClass(status) {
       if (status.includes("เสร็จ")) return "finished";
       if (status.includes("กำลัง")) return "in-progress";
@@ -446,61 +517,65 @@
       return "pending";
     }
 
-    // ดึงข้อมูลจาก Google Sheets API (Web App)
     const url = 'https://script.google.com/macros/s/AKfycbz_aw9IF7u9D-2G5q8ppHT_K-kNRhO4HTXWUEU5PGOz-7uDAn2OmVmiS6MZGiFd2duh/exec';
     
     function formatDate(dateString) {
       if (!dateString || dateString === '-') return '-';
       const date = new Date(dateString);
-      if (isNaN(date)) return dateString; // ถ้าไม่ใช่รูปแบบวันที่ให้คืนค่าเดิม
+      if (isNaN(date)) return dateString;
       const day = String(date.getDate()).padStart(2, '0');
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const year = date.getFullYear();
       return `${day}-${month}-${year}`;
     }
-async function loadMods() {
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-    const tbody = document.getElementById('table-body');
-    
-    let html = '';
-    let countFinished = 0;
-    let countProgress = 0;
 
-    for(let i = 1; i < data.length; i++) {
-      // --- ย้ายมาไว้ตรงนี้ ---
-      const downloadUrl = data[i][3] ? data[i][3].toString() : ''; 
-      let downloadCell = '';
-      // ----------------------
+    async function loadMods() {
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        const tbody = document.getElementById('table-body');
+        
+        let html = '';
+        let countFinished = 0;
+        let countProgress = 0;
 
-      const status = data[i][1];
-      const statusClass = getStatusClass(status);
-      
-      if(statusClass === "finished") countFinished++;
-      if(statusClass === "in-progress") countProgress++;
+        for(let i = 1; i < data.length; i++) {
+          const downloadUrl = data[i][3] ? data[i][3].toString() : '';
+          let downloadCell = '';
+          const status = data[i][1];
+          const statusClass = getStatusClass(status);
+          
+          if(statusClass === "finished") countFinished++;
+          if(statusClass === "in-progress") countProgress++;
 
-      // เช็กเงื่อนไขลิงก์ดาวน์โหลด
-      if (!downloadUrl || downloadUrl === '-' || downloadUrl.trim() === '') {
-        downloadCell = `<span class="download-link" style="opacity: 0.5; pointer-events: none; background: #30363d; color: #8b949e; cursor: not-allowed;">ยังไม่อัปโหลด</span>`;
-      } else {
-        downloadCell = `<a href="${downloadUrl}" target="_blank" class="download-link">ดาวน์โหลดม็อด</a>`;
-      }
+          if (!downloadUrl || downloadUrl === '-' || downloadUrl.trim() === '') {
+            downloadCell = `<span class="download-link" style="opacity: 0.5; pointer-events: none; background: #30363d; color: #8b949e; cursor: not-allowed;">รออัปโหลด</span>`;
+          } else {
+            downloadCell = `<a href="${downloadUrl}" target="_blank" class="download-link">ดาวน์โหลด</a>`;
+          }
 
-      html += `
-        <tr>
-          <td class="order-cell">${i}</td>
-          <td><span class="status-badge ${statusClass}">${status}</span></td>
-          <td><span class="game-name">${data[i][2]}</span></td>
-          <td>${downloadCell}</td> 
-          <td><span class="translator">${data[i][4] || '-'}</span></td>
-          <td><span class="update-date">${formatDate(data[i][5])}</span></td>
-          <td><span class="notes">${data[i][6] || '-'}</span></td>
-        </tr>`;
-    }
-    tbody.innerHTML = html;
+          const storeUrl = data[i][7] ? data[i][7].toString() : '';
+          let storeCell = '';
+          if (!storeUrl || storeUrl === '-' || storeUrl.trim() === '') {
+            storeCell = `<span class="store-link" style="opacity: 0.5; pointer-events: none; background: #30363d; color: #8b949e; cursor: not-allowed;">รอใส่ลิงก์</span>`;
+          } else {
+            storeCell = `<a href="${storeUrl}" target="_blank" class="store-link">ซื้อเกม</a>`;
+          }
 
-        // อัปเดตสถิติใน Footer
+          html += `
+            <tr>
+              <td class="order-cell">${i}</td>
+              <td><span class="status-badge ${statusClass}">${status}</span></td>
+              <td><span class="game-name">${data[i][2]}</span></td>
+              <td>${downloadCell}</td>
+              <td><span class="translator">${data[i][4] || '-'}</span></td>
+              <td><span class="update-date">${formatDate(data[i][5])}</span></td>
+              <td><span class="notes">${data[i][6] || '-'}</span></td>
+              <td>${storeCell}</td>
+            </tr>`;
+        }
+        tbody.innerHTML = html;
+
         document.getElementById('stats-container').innerHTML = `
           <div class="footer-item"><span>📊</span> รวมเกมทั้งหมด: <strong>${data.length - 1} เกม</strong></div>
           <div class="footer-item"><span>✅</span> แปลเสร็จ: <strong>${countFinished} เกม</strong></div>
@@ -509,7 +584,7 @@ async function loadMods() {
 
       } catch (error) {
         console.error('Error:', error);
-        document.getElementById('table-body').innerHTML = '<tr><td colspan="7" style="color:red; text-align:center;">ไม่สามารถเชื่อมต่อข้อมูลจาก Google Sheets ได้</td></tr>';
+        document.getElementById('table-body').innerHTML = '<tr><td colspan="8" style="color:red; text-align:center;">ไม่อสามารถเชื่อมต่อข้อมูลจาก Google Sheets ได้</td></tr>';
       }
     }
     
