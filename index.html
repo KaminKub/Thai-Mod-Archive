@@ -450,9 +450,11 @@
         const response = await fetch(url);
         const data = await response.json();
         const tbody = document.getElementById('table-body');
+        const downloadUrl = data[i][3];
         let html = '';
         let countFinished = 0;
         let countProgress = 0;
+        let downloadCell = '';
 
         for(let i = 1; i < data.length; i++) {
           const status = data[i][1];
@@ -460,13 +462,20 @@
           
           if(statusClass === "finished") countFinished++;
           if(statusClass === "in-progress") countProgress++;
+          if (!downloadUrl || downloadUrl === '-' || downloadUrl.trim() === '') {
+            // กรณีไม่มีลิงก์: แสดงข้อความ "ยังไม่อัปโหลด" สีทึบ และกดไม่ได้
+            downloadCell = `<span class="download-link" style="opacity: 0.5; pointer-events: none; background: #30363d; color: #8b949e; cursor: not-allowed;">ยังไม่อัปโหลด</span>`;
+          } else {
+            // กรณีมีลิงก์: แสดงปุ่มดาวน์โหลดตามปกติ
+            downloadCell = `<a href="${downloadUrl}" target="_blank" class="download-link">ดาวน์โหลดม็อด</a>`;
+          }
 
           html += `
             <tr>
               <td class="order-cell">${i}</td>
               <td><span class="status-badge ${statusClass}">${status}</span></td>
               <td><span class="game-name">${data[i][2]}</span></td>
-              <td><a href="${data[i][3]}" class="download-link">${data[i][3] === '-' ? '-' : 'ดาวน์โหลดม็อด'}</a></td>
+              <td>${downloadCell}</td> <td><span class="translator">${data[i][4] || '-'}</span></td>
               <td><span class="translator">${data[i][4] || '-'}</span></td>
               <td><span class="update-date">${formatDate(data[i][5])}</span></td>
               <td><span class="notes">${data[i][6] || '-'}</span></td>
