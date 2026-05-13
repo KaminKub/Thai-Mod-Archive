@@ -106,7 +106,11 @@
       border-radius: 16px;
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
       overflow: hidden;
-      transition: background 0.3s ease;
+      transition: background 0.3s ease;      /* เพิ่มบรรทัดนี้เพื่อให้เบราว์เซอร์บังคับสร้าง Layer ใหม่ */
+      transform: translateZ(0); 
+      -webkit-transform: translateZ(0);
+      backface-visibility: hidden; /* ป้องกันการกะพริบหรือหายบนมือถือ */
+      -webkit-backface-visibility: hidden;
     }
 
     .header {
