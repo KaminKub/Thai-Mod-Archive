@@ -865,7 +865,7 @@ async function loadMods() {
               <td><span class="status-badge ${statusClass}">${status}</span></td>
               <td><span class="game-name">${gameName}</span></td>
               <td>${downloadUrl && downloadUrl !== '-' ? `<a href="${downloadUrl}" target="_blank" class="download-link">ดาวน์โหลด</a>` : `<span class="download-link" style="opacity:0.5; pointer-events:none;">ยังไม่อัป</span>`}</td>
-              <td>${storeUrl ? `<a href="${storeUrl}" target="_blank" class="store-link">ซื้อ</a>` : `-`}</td>
+              <td>${storeUrl ? `<a href="${storeUrl}" target="_blank" class="store-link">ซื้อ</a>` : `<span class="download-link" style="opacity:0.5; pointer-events:none;">ยังไม่อัป</span>`}</td>
               <td><span class="update-date">${updateDate}</span></td>
               <td><span class="notes">${notes}</span></td>
               <td><span class="translator">${translator}</span></td>
