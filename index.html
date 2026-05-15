@@ -291,6 +291,47 @@
       box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
     }
 
+    /* Filter Container Styles */
+    .filter-container {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      padding: 12px 0;
+      flex-wrap: wrap;
+    }
+
+    #searchInput {
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--cell-border);
+      background: var(--container-bg);
+      color: var(--cell-text);
+      font-size: 14px;
+      min-width: 250px;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    #searchInput:focus {
+      border-color: var(--link-color);
+    }
+
+    #statusFilter {
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--cell-border);
+      background: var(--container-bg);
+      color: var(--cell-text);
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s ease;
+      min-width: 180px;
+    }
+
+    #statusFilter:focus {
+      border-color: var(--link-color);
+    }
+
     .table-container {
       overflow-x: auto;
       padding: 20px;
@@ -708,6 +749,18 @@
       </button>
     </div>
 
+    <div class="filter-container">
+      <input type="text" id="searchInput" placeholder="🔍 ค้นหาชื่อเกม..." oninput="filterData()">
+      
+      <select id="statusFilter" onchange="filterData()">
+        <option value="">สถานะทั้งหมด</option>
+        <option value="✅ แปลเสร็จแล้ว">แปลเสร็จแล้ว</option>
+        <option value="📝 รอ Review">รอ Review</option>
+        <option value="🔄 กำลังแปล">กำลังแปล</option>
+        <option value="📋 รอแปล">รอแปล</option>
+      </select>
+    </div>
+
     <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
 
     <div class="table-container" id="table-container">
@@ -716,7 +769,7 @@
           <tr>
             <th style="width: 56px;"></th>
             <th>สถานะแปล</th>
-            <th>ชื่อเกม</th>
+            <th>ชื่่อเกม</th>
             <th>โหลดม็อด</th>
             <th>หน้าร้านค้า</th>
             <th>วันที่อัปเดต</th>
@@ -751,6 +804,10 @@
   </div>
 
   <script>
+    let allData = []; // ตัวแปรกลางเก็บข้อมูลทั้งหมด
+    const sheetUrl = 'https://script.google.com/macros/s/AKfycbz_aw9IF7u9D-2G5q8ppHT_K-kNRhO4HTXWUEU5PGOz-7uDAn2OmVmiS6MZGiFd2duh/exec';
+    const defaultIcon = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 48 48%22%3E%3Crect width=%2248%22 height=%2248%22 fill=%22%2330363d%22 rx=%228%22%2F%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 fill=%22%238b949e%22 font-family=%22sans-serif%22 font-size=%2214%22%3E🎮%3C%2Ftext%3E%3C%2Fsvg%3E';
+
     function toggleTheme() {
       const body = document.body;
       const toggleBtn = document.querySelector('.theme-toggle');
@@ -763,46 +820,28 @@
       }
     }
 
-    function toggleDonate() {
-      const dropdown = document.getElementById('donateDropdown');
-      dropdown.classList.toggle('show');
-    }
-
-    window.onclick = function(event) {
-      if (!event.target.matches('.donate-btn') && !event.target.closest('.donate-btn')) {
-        const dropdown = document.getElementById('donateDropdown');
-        if (dropdown.classList.contains('show')) dropdown.classList.remove('show');
-      }
-    }
+    function toggleDonate() { document.getElementById('donateDropdown').classList.toggle('show'); }
 
     function getStatusClass(status) {
       if (status.includes("เสร็จ")) return "finished";
       if (status.includes("กำลัง")) return "in-progress";
       if (status.includes("รอแปล")) return "pending";
       if (status.includes("Review")) return "review";
-      if (status.includes("ลบ")) return "deleted";
-      if (status.includes("หยุด")) return "deleted";
+      if (status.includes("ลบ") || status.includes("หยุด")) return "deleted";
       return "pending";
     }
 
-    // Extract AppID from Steam store URL
     function extractAppId(url) {
       if (!url) return null;
       const match = url.match(/store\.steampowered\.com\/app\/(\d+)/);
       return match ? match[1] : null;
     }
 
-    // Google Sheets URL for fetching data
-    const sheetUrl = 'https://script.google.com/macros/s/AKfycbz_aw9IF7u9D-2G5q8ppHT_K-kNRhO4HTXWUEU5PGOz-7uDAn2OmVmiS6MZGiFd2duh/exec';
-
     function formatDate(dateString) {
       if (!dateString || dateString === '-') return '-';
       const date = new Date(dateString);
       if (isNaN(date)) return dateString;
-      const day = String(date.getDate()).padStart(2, '0');
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const year = date.getFullYear();
-      return `${day}-${month}-${year}`;
+      return `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`;
     }
 
     function setView(viewType) {
@@ -824,101 +863,86 @@
       }
     }
 
-async function loadMods() {
+    // --- ฟังก์ชันหลักในการแสดงผล UI ---
+    function renderContent(data) {
+      let htmlList = '';
+      let htmlGrid = '';
+      let countFinished = 0;
+
+      for (let i = 1; i < data.length; i++) {
+        const item = data[i];
+        const status = item[1] || '';
+        const gameName = item[2] || '-';
+        const downloadUrl = item[3] || '';
+        const translator = item[4] || '-';
+        const updateDate = formatDate(item[5]);
+        const notes = item[6] || '-';
+        const storeUrl = item[7] || '';
+        
+        const statusClass = getStatusClass(status);
+        if(statusClass === "finished") countFinished++;
+
+        // List View
+        htmlList += `
+          <tr>
+            <td class="icon-cell"><img id="icon-${i}-list" src="${defaultIcon}" loading="lazy"></td>
+            <td><span class="status-badge ${statusClass}">${status}</span></td>
+            <td><span class="game-name">${gameName}</span></td>
+            <td>${downloadUrl && downloadUrl !== '-' ? `<a href="${downloadUrl}" target="_blank" class="download-link">ดาวน์โหลด</a>` : `<span class="download-link" style="opacity:0.5; pointer-events:none;">ยังไม่อัพ</span>`}</td>
+            <td>${storeUrl ? `<a href="${storeUrl}" target="_blank" class="store-link">ซื้อ</a>` : `-`}</td>
+            <td><span class="update-date">${updateDate}</span></td>
+            <td><span class="notes">${notes}</span></td>
+            <td><span class="translator">${translator}</span></td>
+          </tr>`;
+
+        // Grid View
+        htmlGrid += `
+          <div class="grid-item">
+            <div class="grid-item-image">
+              <img id="icon-${i}-grid" src="${defaultIcon}" loading="lazy">
+              <div class="grid-item-title">${gameName}</div>
+            </div>
+            <div class="grid-item-info">
+              <div style="margin-bottom:8px;"><span class="status-badge ${statusClass}">${status}</span></div>
+              <div class="grid-item-actions">
+                ${downloadUrl && downloadUrl !== '-' ? `<a href="${downloadUrl}" target="_blank" class="grid-item-action download">ดาวน์โหลด</a>` : ''}
+                ${storeUrl ? `<a href="${storeUrl}" target="_blank" class="grid-item-action price">ซื้อ</a>` : ''}
+              </div>
+              <div style="font-size:12px; color:var(--footer-text); flex-grow:1; margin-top:10px;">${notes}</div>
+              <div style="margin-top:10px; font-size:11px; color:var(--footer-text); display:flex; gap:8px;">
+                 <span>👤 ${translator}</span>
+                 <span>📅 ${updateDate}</span>
+              </div>
+            </div>
+          </div>`;
+      }
+
+      document.getElementById('table-body').innerHTML = htmlList || '<tr><td colspan="8" style="text-align:center;">ไม่พบข้อมูลที่ค้นหา</td></tr>';
+      document.getElementById('grid-container').innerHTML = htmlGrid || '<div style="padding:20px; text-align:center; width:100%;">ไม่พบข้อมูลที่ค้นหา</div>';
+      document.getElementById('stats-container').innerHTML = `
+        <div class="footer-item"><span>📊</span> ทั้งหมด: <strong>${data.length - 1}</strong></div>
+        <div class="footer-item"><span>✅</span> แปลเสร็จ: <strong>${countFinished}</strong></div>`;
+
+      // โหลดรูป Steam
+      data.forEach((item, index) => {
+        if(index === 0) return;
+        const appId = extractAppId(item[7]);
+        if (appId) {
+          const lImg = document.getElementById(`icon-${index}-list`);
+          const gImg = document.getElementById(`icon-${index}-grid`);
+          if(lImg) lImg.src = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${appId}/capsule_184x69.jpg`;
+          if(gImg) gImg.src = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${appId}/library_600x900.jpg`;
+        }
+      });
+    }
+
+    // --- ฟังก์ชันดึงข้อมูลจาก Google Sheets ---
+    async function loadMods() {
       try {
         const response = await fetch(sheetUrl);
-        const data = await response.json();
-        
-        if (!data || data.length <= 1) {
-          document.getElementById('table-body').innerHTML = '<tr><td colspan="8" style="text-align:center;">ไม่พบข้อมูลในระบบ</td></tr>';
-          document.getElementById('loadingOverlay').classList.remove('show');
-          return;
-        }
-
-        let htmlList = '';
-        let htmlGrid = '';
-        let countFinished = 0;
-        let countProgress = 0;
-        const defaultIcon = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 48 48%22%3E%3Crect width=%2248%22 height=%2248%22 fill=%22%2330363d%22 rx=%228%22%2F%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 fill=%22%238b949e%22 font-family=%22sans-serif%22 font-size=%2214%22%3E🎮%3C%2Ftext%3E%3C%2Fsvg%3E';
-
-        for (let i = 1; i < data.length; i++) {
-          const item = data[i];
-          const status = item[1] || '';
-          const gameName = item[2] || '-';
-          const downloadUrl = item[3] || '';
-          const translator = item[4] || '-';
-          const updateDateRaw = item[5] || '-';
-          const notes = item[6] || '-';
-          const storeUrl = item[7] || '';
-          
-          const statusClass = getStatusClass(status);
-          if(statusClass === "finished") countFinished++;
-          if(statusClass === "in-progress") countProgress++;
-
-          const updateDate = formatDate(updateDateRaw);
-          const iconId = `icon-${i}`;
-
-          // List View HTML
-          htmlList += `
-            <tr>
-              <td class="icon-cell"><img id="${iconId}-list" src="${defaultIcon}" alt="${gameName}" loading="lazy"></td>
-              <td><span class="status-badge ${statusClass}">${status}</span></td>
-              <td><span class="game-name">${gameName}</span></td>
-              <td>${downloadUrl && downloadUrl !== '-' ? `<a href="${downloadUrl}" target="_blank" class="download-link">ดาวน์โหลด</a>` : `<span class="download-link" style="opacity:0.5; pointer-events:none;">ยังไม่อัป</span>`}</td>
-              <td>${storeUrl ? `<a href="${storeUrl}" target="_blank" class="store-link">ซื้อ</a>` : `-`}</td>
-              <td><span class="update-date">${updateDate}</span></td>
-              <td><span class="notes">${notes}</span></td>
-              <td><span class="translator">${translator}</span></td>
-            </tr>`;
-
-          // Grid View HTML
-          htmlGrid += `
-            <div class="grid-item">
-              <div class="grid-item-image">
-                <img id="${iconId}-grid" src="${defaultIcon}" alt="${gameName}" loading="lazy">
-                <div class="grid-item-title">${gameName}</div>
-              </div>
-              <div class="grid-item-info">
-                <div style="margin-bottom:8px;"><span class="status-badge ${statusClass}">${status}</span></div>
-                <div class="grid-item-actions">
-                  ${downloadUrl && downloadUrl !== '-' ? `<a href="${downloadUrl}" target="_blank" class="grid-item-action download">ดาวน์โหลด</a>` : `<span class="download-link" style="opacity:0.5; pointer-events:none;">ยังไม่อัป</span>`}
-                  ${storeUrl ? `<a href="${storeUrl}" target="_blank" class="grid-item-action price">ซื้อ</a>` : ''}
-                </div>
-                <div style="font-size:12px; color:var(--footer-text); flex-grow:1;">${notes}</div>
-                <div style="margin-top:10px; font-size:11px; color:var(--footer-text); display:flex; gap:8px;">
-                   <span>👤 ${translator}</span>
-                   <span>📅 ${updateDate}</span>
-                </div>
-              </div>
-            </div>`;
-        }
-
-        // --- จุดสำคัญ: ต้องเอาข้อมูลลงหน้าเว็บก่อน ---
-        document.getElementById('table-body').innerHTML = htmlList;
-        document.getElementById('grid-container').innerHTML = htmlGrid;
-        
-        document.getElementById('stats-container').innerHTML = `
-          <div class="footer-item"><span>📊</span> ทั้งหมด: <strong>${data.length - 1}</strong></div>
-          <div class="footer-item"><span>✅</span> แปลเสร็จ: <strong>${countFinished}</strong></div>
-        `;
-
-        // --- สั่งโหลดรูปภาพ Steam ---
-        for (let i = 1; i < data.length; i++) {
-          const storeUrl = data[i][7] || '';
-          const appId = extractAppId(storeUrl);
-          if (appId) {
-            const listImg = document.getElementById(`icon-${i}-list`);
-            const gridImg = document.getElementById(`icon-${i}-grid`);
-            if(listImg) listImg.src = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${appId}/capsule_184x69.jpg`;
-            if(gridImg) gridImg.src = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${appId}/library_600x900.jpg`;
-          }
-        }
-
-        // ปิดหน้าจอโหลดทันที ไม่ต้องรารูปครบ (เพื่อป้องกันอาการค้าง)
-        setTimeout(() => {
-          document.getElementById('loadingOverlay').classList.remove('show');
-        }, 500);
-
+        allData = await response.json();
+        renderContent(allData);
+        setTimeout(() => document.getElementById('loadingOverlay').classList.remove('show'), 500);
       } catch (error) {
         console.error('Error:', error);
         document.getElementById('table-body').innerHTML = '<tr><td colspan="8" style="color:red; text-align:center;">เกิดข้อผิดพลาดในการโหลดข้อมูล</td></tr>';
@@ -926,7 +950,21 @@ async function loadMods() {
       }
     }
 
-    // Load on page load
+    // --- ฟังก์ชันค้นหาและกรอง ---
+    function filterData() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+      const statusValue = document.getElementById('statusFilter').value;
+
+      const filtered = allData.filter((item, index) => {
+        if (index === 0) return true; // เก็บหัวตารางไว้
+        const matchesSearch = item[2].toLowerCase().includes(searchTerm);
+        const matchesStatus = statusValue === '' || item[1] === statusValue;
+        return matchesSearch && matchesStatus;
+      });
+
+      renderContent(filtered);
+    }
+
     window.addEventListener('DOMContentLoaded', loadMods);
   </script>
 </body>
