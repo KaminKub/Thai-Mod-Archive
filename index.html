@@ -861,7 +861,7 @@ async function loadMods() {
           // List View HTML
           htmlList += `
             <tr>
-              <td class="icon-cell"><img id="${iconId}-list" src="${defaultIcon}" alt="${gameName}"></td>
+              <td class="icon-cell"><img id="${iconId}-list" src="${defaultIcon}" alt="${gameName}" loading="lazy"></td>
               <td><span class="status-badge ${statusClass}">${status}</span></td>
               <td><span class="game-name">${gameName}</span></td>
               <td>${downloadUrl && downloadUrl !== '-' ? `<a href="${downloadUrl}" target="_blank" class="download-link">ดาวน์โหลด</a>` : `<span class="download-link" style="opacity:0.5; pointer-events:none;">ยังไม่อัป</span>`}</td>
