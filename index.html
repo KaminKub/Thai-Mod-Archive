@@ -7,12 +7,12 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://kaminkub.github.io/Thai-Mod-Archive/">
   <meta property="og:title" content="รวมม็อดแปลไทยเกม PCVR By KaminKub">
-  <meta property="og:description" content="เช็กสถานะการแปลและดาวน์โหลดม็อดภาษาไทยล่าสุดได้ที่นี่">
+  <meta property="og:description" content="เช็กสถานะการแปลและดาวน์โหลดม็อดภาษาไทยล่าสุดได้ที่นนี่">
   <meta property="og:image" content="https://kaminkub.github.io/Thai-Mod-Archive/logo.png">
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://kaminkub.github.io/Thai-Mod-Archive/">
   <meta property="twitter:title" content="รวมม็อดแปลไทยเกม PCVR By KaminKub">
-  <meta property="twitter:description" content="เช็กสถานะการแปลและดาวน์โหลดม็อดภาษาไทยล่าสุดได้ที่นี่">
+  <meta property="twitter:description" content="เช็กสถานะการแปลและดาวน์โหลดม็อดภาษาไทยล่าสุดได้ที่นนี่">
   <meta property="twitter:image" content="https://kaminkub.github.io/Thai-Mod-Archive/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com/">
   <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
@@ -106,10 +106,10 @@
       border-radius: 16px;
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
       overflow: hidden;
-      transition: background 0.3s ease;      /* เพิ่มบรรทัดนี้เพื่อให้เบราว์เซอร์บังคับสร้าง Layer ใหม่ */
-      transform: translateZ(0); 
+      transition: background 0.3s ease;
+      transform: translateZ(0);
       -webkit-transform: translateZ(0);
-      backface-visibility: hidden; /* ป้องกันการกะพริบหรือหายบนมือถือ */
+      backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
     }
 
@@ -256,6 +256,41 @@
       transform: rotate(15deg);
     }
 
+    .view-toggle-container {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 0;
+      flex-wrap: wrap;
+    }
+
+    .view-toggle-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 20px;
+      border-radius: 10px;
+      color: var(--btn-text);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: 1.5px solid var(--btn-border);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.2) 100%);
+    }
+
+    .view-toggle-btn.active {
+      background: var(--header-bg);
+      color: #fff;
+    }
+
+    .view-toggle-btn:hover:not(.active) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+    }
+
     .table-container {
       overflow-x: auto;
       padding: 20px;
@@ -290,6 +325,22 @@
       font-size: 14px;
       border-bottom: 1px solid var(--cell-border);
       color: var(--cell-text);
+      vertical-align: middle;
+    }
+
+    .icon-cell img {
+      width: var(--icon-size);
+      height: var(--icon-size);
+      object-fit: cover;
+      object-position: center;
+      border-radius: 6px;
+      border: 1px solid var(--cell-border);
+      background: #161b22;
+    }
+
+    .icon-cell {
+      width: 52px;
+      text-align: center;
     }
 
     .status-badge {
@@ -322,6 +373,7 @@
       font-size: 13px;
       font-weight: 500;
       transition: all 0.2s ease;
+      border: 1px solid rgba(31, 240, 255, 0.705);
     }
 
     .download-link:hover {
@@ -337,7 +389,7 @@
     .store-link {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       padding: 6px 12px;
       background: rgba(255, 0, 85, 0.15);
       border-radius: 8px;
@@ -346,7 +398,7 @@
       font-size: 13px;
       font-weight: 500;
       transition: all 0.2s ease;
-      border: 1px solid rgba(255, 0, 85, 0.3);
+      border: 1px solid rgba(139, 0, 23, 0.363);
     }
 
     .store-link:hover {
@@ -414,8 +466,204 @@
     .legend-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--legend-text); }
     .legend-dot { width: 12px; height: 12px; border-radius: 50%; }
 
-    #mod-list {
+    /* Grid View Styles */
+    .grid-container {
       display: none;
+      padding: 20px;
+      gap: var(--grid-gap);
+    }
+
+    .grid-container.show {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(var(--grid-card-width), 1fr));
+    }
+
+    .grid-item {
+      background: var(--container-bg);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--cell-border);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .grid-item-image {
+      position: relative;
+      background: #111;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 350px;
+    }
+
+    .grid-item-image img {
+      max-width: 100%;
+      max-height: 280px;
+      object-fit: contain;
+    }
+
+    .grid-item-title {
+      position: absolute;
+      top: 10px;
+      left: 12px;
+      right: 12px;
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 10;
+      max-width: calc(100% - 24px);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .grid-item-info {
+      padding: 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      min-height: 180px;
+    }
+
+    .grid-item-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .grid-item-action {
+      flex: 1;
+      min-width: 100px;
+      text-align: center;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+    }
+
+    .grid-item-action.download {
+      background: rgba(88, 166, 255, 0.15);
+      color: var(--link-color);
+      border: 1px solid rgba(31, 240, 255, 0.705);
+    }
+
+    .grid-item-action.download:hover {
+      background: var(--link-hover);
+      color: #fff;
+    }
+
+    .grid-item-action.price {
+      background: rgba(255, 0, 85, 0.15);
+      color: #ff0055;
+      border: 1px solid rgba(230, 0, 57, 0.39);
+    }
+
+    .grid-item-action.price:hover {
+      background: #ff0055;
+      color: #fff;
+    }
+
+    .grid-item-action.status {
+      background: rgba(139, 148, 158, 0.15);
+      color: var(--status-pending);
+    }
+
+    .grid-item-action.status:hover {
+      background: #30363d;
+      color: var(--cell-text);
+    }
+
+    .grid-item-action.translator {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--footer-text);
+    }
+
+    .grid-item-action.translator:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--cell-text);
+    }
+
+    .grid-item-action::before {
+      display: none;
+    }
+
+    /* Loading Spinner */
+    .loading-spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid var(--cell-border);
+      border-top-color: var(--link-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Loading overlay */
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .loading-overlay.show {
+      display: flex;
+    }
+
+    /* Responsive adjustments */
+    @media (min-width: 1400px) {
+      :root { --grid-card-width: 300px; }
+    }
+
+    @media (min-width: 1215px) and (max-width: 1399px) {
+      :root { --grid-card-width: 280px; }
+    }
+
+    @media (min-width: 1024px) and (max-width: 1214px) {
+      :root { --grid-card-width: 260px; }
+    }
+
+    @media (min-width: 800px) and (max-width: 1023px) {
+      :root { --grid-card-width: 250px; }
+    }
+
+    @media (min-width: 600px) and (max-width: 799px) {
+      :root { --grid-card-width: 240px; }
+    }
+
+    @media (max-width: 599px) {
+      :root { --grid-card-width: 220px; --icon-size: 40px; --grid-gap: 15px; }
+      .grid-item-title { font-size: 13px; }
+      .grid-item-info { padding: 12px; min-height: 150px; }
+    }
+
+    @media (max-width: 400px) {
+      :root { --grid-card-width: 190px; --icon-size: 36px; }
+      .grid-item { border-radius: 12px; }
+      .grid-item-image { padding: 8px; }
+      .grid-item-image img { max-height: 220px; }
+      .grid-item-title { font-size: 12px; padding: 6px 8px; }
+      .grid-item-info { padding: 10px; }
+      .grid-item-action { padding: 6px 8px; font-size: 11px; min-width: 80px; }
     }
   </style>
 </head>
@@ -424,7 +672,7 @@
     <div class="header">
       <h1>📋 รวมม็อดแปลไทยเกม PCVR</h1>
       <p>ติดตามสถานะการแปล By KaminKub</p>
-      <p>*แปลเพื่อเล่นเอง* ส่วนใหญ่จึงเป็นการแปลคุณภาพต่ำ...ขออภัยหากไม่ถูกใจ🙇‍♂️</p>
+      <p>*แปลเพื่อเล่นเอง* ส่วนใหญ่จะเป็นการแปลคุณภาพต่ำ...ขออภัยหากไม่ถูกใจ🙇‍♂️</p>
     </div>
 
     <div class="button-container">
@@ -451,36 +699,53 @@
       </div>
     </div>
 
+    <div class="view-toggle-container">
+      <button class="view-toggle-btn active" id="listViewBtn" onclick="setView('list')">
+        มุมมองตาราง
+      </button>
+      <button class="view-toggle-btn" id="gridViewBtn" onclick="setView('grid')">
+        มุมมองปกเกม
+      </button>
+    </div>
+
     <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
 
-    <div class="table-container">
+    <div class="table-container" id="table-container">
       <table id="main-mod-table">
         <thead>
           <tr>
+            <th style="width: 56px;"></th>
             <th>สถานะแปล</th>
             <th>ชื่อเกม</th>
-            <th>ลิ้งม็อด</th>
-            <th>หน้าร้านเกม</th>
+            <th>โหลดม็อด</th>
+            <th>หน้าร้านค้า</th>
             <th>วันที่อัปเดต</th>
             <th>หมายเหตุ</th>
             <th>ผู้แปล</th>
           </tr>
         </thead>
         <tbody id="table-body">
-          <tr><td colspan="8" style="text-align:left;">กำลังโหลดข้อมูลจากคลังม็อด...</td></tr>
+          <tr><td colspan="8" style="text-align:left;">กำลังโหลดข้อมูล...</td></tr>
         </tbody>
       </table>
     </div>
 
+    <div class="grid-container" id="grid-container">
+      <!-- Grid items will be injected here -->
+    </div>
+
+    <div class="loading-overlay" id="loadingOverlay">
+      <div class="loading-spinner"></div>
+    </div>
+
     <div class="footer">
-      <div id="stats-container" style="display: flex; gap: 24px;">
-         </div>
+      <div id="stats-container" style="display: flex; gap: 24px;"></div>
       <div class="legend">
         <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-finished);"></span>แปลเสร็จแล้ว</div>
         <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-progress);"></span>กำลังแปล</div>
         <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-pending);"></span>รอแปล</div>
         <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-review);"></span>รอ Review</div>
-        <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-deleted);"></span>ลบออกแล้ว/หยุดชั่วคราว</div>
+        <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-deleted);"></span>ลบออกไปแล้ว/หยุดชั่วคราว</div>
       </div>
     </div>
   </div>
@@ -520,8 +785,16 @@
       return "pending";
     }
 
-    const url = 'https://script.google.com/macros/s/AKfycbz_aw9IF7u9D-2G5q8ppHT_K-kNRhO4HTXWUEU5PGOz-7uDAn2OmVmiS6MZGiFd2duh/exec';
-    
+    // Extract AppID from Steam store URL
+    function extractAppId(url) {
+      if (!url) return null;
+      const match = url.match(/store\.steampowered\.com\/app\/(\d+)/);
+      return match ? match[1] : null;
+    }
+
+    // Google Sheets URL for fetching data
+    const sheetUrl = 'https://script.google.com/macros/s/AKfycbz_aw9IF7u9D-2G5q8ppHT_K-kNRhO4HTXWUEU5PGOz-7uDAn2OmVmiS6MZGiFd2duh/exec';
+
     function formatDate(dateString) {
       if (!dateString || dateString === '-') return '-';
       const date = new Date(dateString);
@@ -532,65 +805,129 @@
       return `${day}-${month}-${year}`;
     }
 
-    async function loadMods() {
+    function setView(viewType) {
+      const listViewBtn = document.getElementById('listViewBtn');
+      const gridViewBtn = document.getElementById('gridViewBtn');
+      const tableContainer = document.getElementById('table-container');
+      const gridContainer = document.getElementById('grid-container');
+
+      if (viewType === 'list') {
+        listViewBtn.classList.add('active');
+        gridViewBtn.classList.remove('active');
+        tableContainer.style.display = 'block';
+        gridContainer.classList.remove('show');
+      } else {
+        listViewBtn.classList.remove('active');
+        gridViewBtn.classList.add('active');
+        tableContainer.style.display = 'none';
+        gridContainer.classList.add('show');
+      }
+    }
+
+async function loadMods() {
       try {
-        const response = await fetch(url);
+        const response = await fetch(sheetUrl);
         const data = await response.json();
-        const tbody = document.getElementById('table-body');
         
-        let html = '';
+        if (!data || data.length <= 1) {
+          document.getElementById('table-body').innerHTML = '<tr><td colspan="8" style="text-align:center;">ไม่พบข้อมูลในระบบ</td></tr>';
+          document.getElementById('loadingOverlay').classList.remove('show');
+          return;
+        }
+
+        let htmlList = '';
+        let htmlGrid = '';
         let countFinished = 0;
         let countProgress = 0;
+        const defaultIcon = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 48 48%22%3E%3Crect width=%2248%22 height=%2248%22 fill=%22%2330363d%22 rx=%228%22%2F%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 fill=%22%238b949e%22 font-family=%22sans-serif%22 font-size=%2214%22%3E🎮%3C%2Ftext%3E%3C%2Fsvg%3E';
 
-        for(let i = 1; i < data.length; i++) {
-          const downloadUrl = data[i][3] ? data[i][3].toString() : '';
-          let downloadCell = '';
-          const status = data[i][1];
-          const statusClass = getStatusClass(status);
+        for (let i = 1; i < data.length; i++) {
+          const item = data[i];
+          const status = item[1] || '';
+          const gameName = item[2] || '-';
+          const downloadUrl = item[3] || '';
+          const translator = item[4] || '-';
+          const updateDateRaw = item[5] || '-';
+          const notes = item[6] || '-';
+          const storeUrl = item[7] || '';
           
+          const statusClass = getStatusClass(status);
           if(statusClass === "finished") countFinished++;
           if(statusClass === "in-progress") countProgress++;
 
-          if (!downloadUrl || downloadUrl === '-' || downloadUrl.trim() === '') {
-            downloadCell = `<span class="download-link" style="opacity: 0.5; pointer-events: none; background: #30363d; color: #8b949e; cursor: not-allowed;">รออัปโหลด</span>`;
-          } else {
-            downloadCell = `<a href="${downloadUrl}" target="_blank" class="download-link">ดาวน์โหลด</a>`;
-          }
+          const updateDate = formatDate(updateDateRaw);
+          const iconId = `icon-${i}`;
 
-          const storeUrl = data[i][7] ? data[i][7].toString() : '';
-          let storeCell = '';
-          if (!storeUrl || storeUrl === '-' || storeUrl.trim() === '') {
-            storeCell = `<span class="store-link" style="opacity: 0.5; pointer-events: none; background: #30363d; color: #8b949e; cursor: not-allowed;">รอใส่ลิงก์</span>`;
-          } else {
-            storeCell = `<a href="${storeUrl}" target="_blank" class="store-link">ราคา</a>`;
-          }
-
-          html += `
+          // List View HTML
+          htmlList += `
             <tr>
+              <td class="icon-cell"><img id="${iconId}-list" src="${defaultIcon}" alt="${gameName}"></td>
               <td><span class="status-badge ${statusClass}">${status}</span></td>
-              <td><span class="game-name">${data[i][2]}</span></td>
-              <td>${downloadCell}</td>
-              <td>${storeCell}</td>
-              <td><span class="update-date">${formatDate(data[i][5])}</span></td>
-              <td><span class="notes">${data[i][6] || '-'}</span></td>
-              <td><span class="translator">${data[i][4] || '-'}</span></td>
+              <td><span class="game-name">${gameName}</span></td>
+              <td>${downloadUrl && downloadUrl !== '-' ? `<a href="${downloadUrl}" target="_blank" class="download-link">ดาวน์โหลด</a>` : `<span class="download-link" style="opacity:0.5; pointer-events:none;">ยังไม่อัป</span>`}</td>
+              <td>${storeUrl ? `<a href="${storeUrl}" target="_blank" class="store-link">ซื้อ</a>` : `-`}</td>
+              <td><span class="update-date">${updateDate}</span></td>
+              <td><span class="notes">${notes}</span></td>
+              <td><span class="translator">${translator}</span></td>
             </tr>`;
-        }
-        tbody.innerHTML = html;
 
+          // Grid View HTML
+          htmlGrid += `
+            <div class="grid-item">
+              <div class="grid-item-image">
+                <img id="${iconId}-grid" src="${defaultIcon}" alt="${gameName}" loading="lazy">
+                <div class="grid-item-title">${gameName}</div>
+              </div>
+              <div class="grid-item-info">
+                <div style="margin-bottom:8px;"><span class="status-badge ${statusClass}">${status}</span></div>
+                <div class="grid-item-actions">
+                  ${downloadUrl && downloadUrl !== '-' ? `<a href="${downloadUrl}" target="_blank" class="grid-item-action download">ดาวน์โหลด</a>` : ''}
+                  ${storeUrl ? `<a href="${storeUrl}" target="_blank" class="grid-item-action price">ซื้อ</a>` : ''}
+                </div>
+                <div style="font-size:12px; color:var(--footer-text); flex-grow:1;">${notes}</div>
+                <div style="margin-top:10px; font-size:11px; color:var(--footer-text); display:flex; gap:8px;">
+                   <span>👤 ${translator}</span>
+                   <span>📅 ${updateDate}</span>
+                </div>
+              </div>
+            </div>`;
+        }
+
+        // --- จุดสำคัญ: ต้องเอาข้อมูลลงหน้าเว็บก่อน ---
+        document.getElementById('table-body').innerHTML = htmlList;
+        document.getElementById('grid-container').innerHTML = htmlGrid;
+        
         document.getElementById('stats-container').innerHTML = `
-          <div class="footer-item"><span>📊</span> รวมเกมทั้งหมด: <strong>${data.length - 1} เกม</strong></div>
-          <div class="footer-item"><span>✅</span> แปลเสร็จ: <strong>${countFinished} เกม</strong></div>
-          <div class="footer-item"><span>🔄</span> กำลังแปล: <strong>${countProgress} เกม</strong></div>
+          <div class="footer-item"><span>📊</span> ทั้งหมด: <strong>${data.length - 1}</strong></div>
+          <div class="footer-item"><span>✅</span> แปลเสร็จ: <strong>${countFinished}</strong></div>
         `;
+
+        // --- สั่งโหลดรูปภาพ Steam ---
+        for (let i = 1; i < data.length; i++) {
+          const storeUrl = data[i][7] || '';
+          const appId = extractAppId(storeUrl);
+          if (appId) {
+            const listImg = document.getElementById(`icon-${i}-list`);
+            const gridImg = document.getElementById(`icon-${i}-grid`);
+            if(listImg) listImg.src = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${appId}/capsule_184x69.jpg`;
+            if(gridImg) gridImg.src = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${appId}/library_600x900.jpg`;
+          }
+        }
+
+        // ปิดหน้าจอโหลดทันที ไม่ต้องรารูปครบ (เพื่อป้องกันอาการค้าง)
+        setTimeout(() => {
+          document.getElementById('loadingOverlay').classList.remove('show');
+        }, 500);
 
       } catch (error) {
         console.error('Error:', error);
-        document.getElementById('table-body').innerHTML = '<tr><td colspan="8" style="color:red; text-align:center;">ไม่อสามารถเชื่อมต่อข้อมูลจาก Google Sheets ได้</td></tr>';
+        document.getElementById('table-body').innerHTML = '<tr><td colspan="8" style="color:red; text-align:center;">เกิดข้อผิดพลาดในการโหลดข้อมูล</td></tr>';
+        document.getElementById('loadingOverlay').classList.remove('show');
       }
     }
-    
-    loadMods();
+
+    // Load on page load
+    window.addEventListener('DOMContentLoaded', loadMods);
   </script>
 </body>
 </html>
