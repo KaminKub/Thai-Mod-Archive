@@ -742,10 +742,10 @@
     </div>
 
     <div class="view-toggle-container">
-      <button class="view-toggle-btn active" id="listViewBtn" onclick="setView('list')">
+      <button class="view-toggle-btn" id="listViewBtn" onclick="setView('list')">
         มุมมองตาราง
       </button>
-      <button class="view-toggle-btn" id="gridViewBtn" onclick="setView('grid')">
+      <button class="view-toggle-btn active" id="gridViewBtn" onclick="setView('grid')">
         มุมมองปกเกม
       </button>
     </div>
@@ -764,7 +764,7 @@
 
     <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
 
-    <div class="table-container" id="table-container">
+    <div class="table-container" id="table-container" style="display:none;">
       <table id="main-mod-table">
         <thead>
           <tr>
@@ -943,6 +943,7 @@
         const response = await fetch(sheetUrl);
         allData = await response.json();
         renderContent(allData);
+        setView('grid');
         setTimeout(() => document.getElementById('loadingOverlay').classList.remove('show'), 500);
       } catch (error) {
         console.error('Error:', error);
