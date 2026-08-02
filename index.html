@@ -3,20 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>รวมม็อดแปลไทยเกม PCVR By KaminKub</title>
+  <title>เธฃเธงเธกเธกเนเธญเธ”เนเธเธฅเนเธ—เธขเน€เธเธก PCVR By KaminKub</title>
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://kaminkub.github.io/Thai-Mod-Archive/">
-  <meta property="og:title" content="รวมม็อดแปลไทยเกม PCVR By KaminKub">
-  <meta property="og:description" content="เช็กสถานะการแปลและดาวน์โหลดม็อดภาษาไทยล่าสุดได้ที่นนี่">
+  <meta property="og:title" content="เธฃเธงเธกเธกเนเธญเธ”เนเธเธฅเนเธ—เธขเน€เธเธก PCVR By KaminKub">
+  <meta property="og:description" content="เน€เธเนเธเธชเธ–เธฒเธเธฐเธเธฒเธฃเนเธเธฅเนเธฅเธฐเธ”เธฒเธงเธเนเนเธซเธฅเธ”เธกเนเธญเธ”เธ เธฒเธฉเธฒเนเธ—เธขเธฅเนเธฒเธชเธธเธ”เนเธ”เนเธ—เธตเนเธเธเธตเน">
   <meta property="og:image" content="https://kaminkub.github.io/Thai-Mod-Archive/logo.png">
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://kaminkub.github.io/Thai-Mod-Archive/">
-  <meta property="twitter:title" content="รวมม็อดแปลไทยเกม PCVR By KaminKub">
-  <meta property="twitter:description" content="เช็กสถานะการแปลและดาวน์โหลดม็อดภาษาไทยล่าสุดได้ที่นนี่">
+  <meta property="twitter:title" content="เธฃเธงเธกเธกเนเธญเธ”เนเธเธฅเนเธ—เธขเน€เธเธก PCVR By KaminKub">
+  <meta property="twitter:description" content="เน€เธเนเธเธชเธ–เธฒเธเธฐเธเธฒเธฃเนเธเธฅเนเธฅเธฐเธ”เธฒเธงเธเนเนเธซเธฅเธ”เธกเนเธญเธ”เธ เธฒเธฉเธฒเนเธ—เธขเธฅเนเธฒเธชเธธเธ”เนเธ”เนเธ—เธตเนเธเธเธตเน">
   <meta property="twitter:image" content="https://kaminkub.github.io/Thai-Mod-Archive/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com/">
   <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     :root {
       --btn-text: #ffffff;
@@ -105,7 +106,6 @@
       background: var(--container-bg);
       border-radius: 16px;
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-      overflow: hidden;
       transition: background 0.3s ease;
       transform: translateZ(0);
       -webkit-transform: translateZ(0);
@@ -118,6 +118,7 @@
       color: #fff;
       padding: 24px 32px;
       text-align: center;
+      border-radius: 16px 16px 0 0;
     }
 
     .header h1 {
@@ -132,12 +133,23 @@
       opacity: 0.9;
     }
 
+    .sticky-bar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: transparent;
+      transition: all 0.3s ease;
+    }
+
     .button-container {
       display: flex;
       justify-content: center;
-      gap: 12px;
+      gap: 10px;
       padding: 12px 0;
       flex-wrap: wrap;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+      max-height: 60px;
     }
 
     .header-btn {
@@ -261,14 +273,16 @@
       display: flex;
       justify-content: center;
       gap: 8px;
-      padding: 12px 0;
+      padding: 8px 0 12px 0;
       flex-wrap: wrap;
+      border-bottom: 1px solid var(--cell-border);
     }
 
     .view-toggle-btn {
       position: relative;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
       padding: 10px 20px;
       border-radius: 10px;
@@ -297,7 +311,7 @@
       display: flex;
       justify-content: center;
       gap: 12px;
-      padding: 12px 0;
+      padding: 6px 0 10px 0;
       flex-wrap: wrap;
     }
 
@@ -423,10 +437,7 @@
       color: #fff;
     }
 
-    .download-link::before {
-      content: '⬇';
-      font-size: 14px;
-    }
+    
 
     .store-link {
       display: inline-flex;
@@ -450,10 +461,7 @@
       transform: translateY(-1px);
     }
 
-    .store-link::before {
-      content: '🎮';
-      font-size: 14px;
-    }
+    
 
     .game-name {
       color: var(--link-color);
@@ -490,6 +498,7 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 16px;
+      border-radius: 0 0 16px 16px;
     }
 
     .footer-item {
@@ -607,13 +616,13 @@
     }
 
     .grid-item-action.price {
-      background: rgba(255, 0, 85, 0.15);
-      color: #ff0055;
-      border: 1px solid rgba(230, 0, 57, 0.39);
+      background: rgba(255, 0, 85, 0.25);
+      color: #ff4d94;
+      border: 1px solid rgba(255, 77, 148, 0.5);
     }
 
     .grid-item-action.price:hover {
-      background: #ff0055;
+      background: #ff4d94;
       color: #fff;
     }
 
@@ -637,9 +646,7 @@
       color: var(--cell-text);
     }
 
-    .grid-item-action::before {
-      display: none;
-    }
+    
 
     /* Loading Spinner */
     .loading-spinner {
@@ -707,79 +714,217 @@
       .grid-item-info { padding: 10px; }
       .grid-item-action { padding: 6px 8px; font-size: 11px; min-width: 80px; }
     }
+
+    /* Collapse animation for sticky bar */
+    .sticky-bar.collapsed .button-container {
+      max-height: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+      .button-container {
+        gap: 8px;
+        padding: 8px 0 4px 0;
+      }
+      .header-btn {
+        padding: 8px 14px;
+        font-size: 13px;
+      }
+      .header-btn span.icon {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+      }
+      .header-btn img.icon-img {
+        width: 24px;
+        height: 24px;
+      }
+      .filter-container {
+        gap: 8px;
+        padding: 4px 0 8px 0;
+      }
+      #searchInput {
+        min-width: 180px;
+        padding: 8px 12px;
+        font-size: 13px;
+      }
+      #statusFilter {
+        min-width: 140px;
+        padding: 8px 12px;
+        font-size: 13px;
+      }
+      .view-toggle-container {
+        padding: 4px 0 8px 0;
+      }
+      .toggle-label {
+        display: none;
+      }
+      .view-toggle-btn {
+        padding: 8px 12px;
+        font-size: 18px;
+        min-width: 40px;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .btn-label {
+        display: none;
+      }
+      .header-btn {
+        padding: 8px 10px;
+      }
+      .button-container {
+        gap: 6px;
+        padding: 6px 0 2px 0;
+      }
+      .filter-container {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 4px 8px 8px 8px;
+      }
+      #searchInput {
+        min-width: 100%;
+      }
+      #statusFilter {
+        min-width: 100%;
+      }
+      .view-toggle-container {
+        padding: 2px 0 6px 0;
+        gap: 6px;
+      }
+      .view-toggle-btn {
+        padding: 6px 10px;
+        font-size: 16px;
+        min-width: 36px;
+      }
+    }
+
+    /* Font Awesome icon styles */
+    .header-fa-icon {
+      font-size: 24px;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .header-btn .fa-solid,
+    .header-btn .fa-brands {
+      font-size: 24px;
+    }
+    .toggle-icon {
+      font-size: 16px;
+    }
+    .view-toggle-btn .fa-solid,
+    .view-toggle-btn .fa-brands {
+      font-size: 16px;
+    }
+    .download-link .fa-solid,
+    .download-link .fa-brands {
+      font-size: 14px;
+      margin-right: 2px;
+    }
+    .store-link .fa-brands {
+      font-size: 16px;
+      margin-right: 2px;
+    }
+    .grid-item-action .fa-solid,
+    .grid-item-action .fa-brands {
+      font-size: 13px;
+      margin-right: 4px;
+    }
+    .footer-item .fa-solid {
+      font-size: 16px;
+    }
+    .theme-toggle .fa-solid {
+      font-size: 24px;
+    }
+    .grid-item-info .fa-solid {
+      font-size: 12px;
+      margin-right: 4px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <h1>📋 รวมม็อดแปลไทยเกม PCVR</h1>
-      <p>ติดตามสถานะการแปล By KaminKub</p>
-      <p>*แปลเพื่อเล่นเอง* ส่วนใหญ่จะเป็นการแปลคุณภาพต่ำ...ขออภัยหากไม่ถูกใจ🙇‍♂️</p>
+      <h1><i class="fa-solid fa-list"></i> รวมม็อดแปลไทยเกม PCVR</h1>
+      <p>เธ•เธดเธ”เธ•เธฒเธกเธชเธ–เธฒเธเธฐเธเธฒเธฃเนเธเธฅ By KaminKub</p>
+      <p>*เนเธเธฅเน€เธเธทเนเธญเน€เธฅเนเธเน€เธญเธ* เธชเนเธงเธเนเธซเธเนเธเธฐเน€เธเนเธเธเธฒเธฃเนเธเธฅเธเธธเธ“เธ เธฒเธเธ•เนเธณ...เธเธญเธญเธ เธฑเธขเธซเธฒเธเนเธกเนเธ–เธนเธเนเธ๐โ€โ๏ธ</p>
     </div>
 
-    <div class="button-container">
+    <div class="sticky-bar" id="stickyBar">
+    <div class="button-container" id="buttonContainer">
       <a href="https://www.openlink.co/kaminkub" class="header-btn" target="_blank">
-        <span class="icon">📣</span>
-        ติดตามผลงาน
+        <i class="fa-solid fa-bullhorn header-fa-icon"></i>
+        <span class="btn-label">เธ•เธดเธ”เธ•เธฒเธกเธเธฅเธเธฒเธ</span>
       </a>
 
       <div class="donate-wrapper">
         <div class="header-btn donate-btn" id="donateBtn" onclick="toggleDonate()">
-          <img src="./mod-tracking-table_files/coffee.png" class="icon-img" alt="">
-          เลี้ยงกาแฟผม
+          <img src="./mod-tracking-table_files/coffee.png" class="icon-img" alt="" width="30" height="30">
+          <span class="btn-label">เน€เธฅเธตเนเธขเธเธเธฒเนเธเธเธก</span>
         </div>
         <div class="donate-dropdown" id="donateDropdown">
           <a href="https://tipkub.me/kaminkub" target="_blank">
-            <img src="./mod-tracking-table_files/tipkub.jpg" alt="">
-            เลี้ยงผ่าน TipKub
-          </a>          
+            <img src="./mod-tracking-table_files/tipkub.jpg" alt="" width="70" height="70">
+            เน€เธฅเธตเนเธขเธเธเนเธฒเธ TipKub
+          </a>
           <a href="https://easydonate.app/kaminkub" target="_blank">
-            <img src="./mod-tracking-table_files/favicon.png" alt="">
-            เลี้ยงผ่าน EasyDonate
+            <img src="./mod-tracking-table_files/favicon.png" alt="" width="70" height="70">
+            เน€เธฅเธตเนเธขเธเธเนเธฒเธ EasyDonate
           </a>
         </div>
       </div>
     </div>
 
-    <div class="view-toggle-container">
-      <button class="view-toggle-btn" id="listViewBtn" onclick="setView('list')">
-        มุมมองตาราง
-      </button>
-      <button class="view-toggle-btn active" id="gridViewBtn" onclick="setView('grid')">
-        มุมมองปกเกม
-      </button>
-    </div>
-
-    <div class="filter-container">
-      <input type="text" id="searchInput" placeholder="🔍 ค้นหาชื่อเกม..." oninput="filterData()">
+    <div class="filter-container" id="filterContainer">
+      <input type="text" id="searchInput" placeholder="๐” เธเนเธเธซเธฒเธเธทเนเธญเน€เธเธก..." oninput="filterData()">
       
       <select id="statusFilter" onchange="filterData()">
-        <option value="">สถานะทั้งหมด</option>
-        <option value="✅ แปลเสร็จแล้ว">แปลเสร็จแล้ว</option>
-        <option value="📝 รอ Review">รอ Review</option>
-        <option value="🔄 กำลังแปล">กำลังแปล</option>
-        <option value="📋 รอแปล">รอแปล</option>
+        <option value="">เธชเธ–เธฒเธเธฐเธ—เธฑเนเธเธซเธกเธ”</option>
+        <option value="โ… เนเธเธฅเน€เธชเธฃเนเธเนเธฅเนเธง">เนเธเธฅเน€เธชเธฃเนเธเนเธฅเนเธง</option>
+        <option value="๐“ เธฃเธญ Review">เธฃเธญ Review</option>
+        <option value="๐” เธเธณเธฅเธฑเธเนเธเธฅ">เธเธณเธฅเธฑเธเนเธเธฅ</option>
+        <option value="๐“ เธฃเธญเนเธเธฅ">เธฃเธญเนเธเธฅ</option>
       </select>
     </div>
+    </div>
 
-    <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+    <div class="view-toggle-container" id="viewToggleContainer">
+      <button class="view-toggle-btn active" id="listViewBtn" onclick="setView('list')">
+        <i class="fa-solid fa-table-list toggle-icon"></i>
+        <span class="toggle-label">เธ•เธฒเธฃเธฒเธ</span>
+      </button>
+      <button class="view-toggle-btn" id="gridViewBtn" onclick="setView('grid')">
+        <i class="fa-solid fa-table-cells toggle-icon"></i>
+        <span class="toggle-label">เธเธเน€เธเธก</span>
+      </button>
+    </div>
+
+    <button class="theme-toggle" onclick="toggleTheme()"><i class="fa-solid fa-moon" id="themeIcon"></i></button>
 
     <div class="table-container" id="table-container" style="display:none;">
       <table id="main-mod-table">
         <thead>
           <tr>
             <th style="width: 56px;"></th>
-            <th>สถานะแปล</th>
-            <th>ชื่่อเกม</th>
-            <th>โหลดม็อด</th>
-            <th>หน้าร้านค้า</th>
-            <th>วันที่อัปเดต</th>
-            <th>หมายเหตุ</th>
-            <th>ผู้แปล</th>
+            <th>เธชเธ–เธฒเธเธฐเนเธเธฅ</th>
+            <th>เธเธทเนเนเธญเน€เธเธก</th>
+            <th>เนเธซเธฅเธ”เธกเนเธญเธ”</th>
+            <th>เธซเธเนเธฒเธฃเนเธฒเธเธเนเธฒ</th>
+            <th>เธงเธฑเธเธ—เธตเนเธญเธฑเธเน€เธ”เธ•</th>
+            <th>เธซเธกเธฒเธขเน€เธซเธ•เธธ</th>
+            <th>เธเธนเนเนเธเธฅ</th>
           </tr>
         </thead>
         <tbody id="table-body">
-          <tr><td colspan="8" style="text-align:left;">กำลังโหลดข้อมูล...</td></tr>
+          <tr><td colspan="8" style="text-align:left;">เธเธณเธฅเธฑเธเนเธซเธฅเธ”เธเนเธญเธกเธนเธฅ...</td></tr>
         </tbody>
       </table>
     </div>
@@ -795,40 +940,40 @@
     <div class="footer">
       <div id="stats-container" style="display: flex; gap: 24px;"></div>
       <div class="legend">
-        <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-finished);"></span>แปลเสร็จแล้ว</div>
-        <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-progress);"></span>กำลังแปล</div>
-        <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-pending);"></span>รอแปล</div>
-        <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-review);"></span>รอ Review</div>
-        <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-deleted);"></span>ลบออกไปแล้ว/หยุดชั่วคราว</div>
+        <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-finished);"></span>เนเธเธฅเน€เธชเธฃเนเธเนเธฅเนเธง</div>
+        <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-progress);"></span>เธเธณเธฅเธฑเธเนเธเธฅ</div>
+        <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-pending);"></span>เธฃเธญเนเธเธฅ</div>
+        <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-review);"></span>เธฃเธญ Review</div>
+        <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-deleted);"></span>เธฅเธเธญเธญเธเนเธเนเธฅเนเธง/เธซเธขเธธเธ”เธเธฑเนเธงเธเธฃเธฒเธง</div>
       </div>
     </div>
   </div>
 
   <script>
-    let allData = []; // ตัวแปรกลางเก็บข้อมูลทั้งหมด
+    let allData = []; // เธ•เธฑเธงเนเธเธฃเธเธฅเธฒเธเน€เธเนเธเธเนเธญเธกเธนเธฅเธ—เธฑเนเธเธซเธกเธ”
     const sheetUrl = 'https://script.google.com/macros/s/AKfycbz_aw9IF7u9D-2G5q8ppHT_K-kNRhO4HTXWUEU5PGOz-7uDAn2OmVmiS6MZGiFd2duh/exec';
-    const defaultIcon = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 48 48%22%3E%3Crect width=%2248%22 height=%2248%22 fill=%22%2330363d%22 rx=%228%22%2F%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 fill=%22%238b949e%22 font-family=%22sans-serif%22 font-size=%2214%22%3E🎮%3C%2Ftext%3E%3C%2Fsvg%3E';
+    const defaultIcon = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 48 48%22%3E%3Crect width=%2248%22 height=%2248%22 fill=%22%2330363d%22 rx=%228%22%2F%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 fill=%22%238b949e%22 font-family=%22sans-serif%22 font-size=%2214%22%3E๐ฎ%3C%2Ftext%3E%3C%2Fsvg%3E';
 
     function toggleTheme() {
       const body = document.body;
       const toggleBtn = document.querySelector('.theme-toggle');
       if (body.getAttribute('data-theme') === 'light') {
         body.removeAttribute('data-theme');
-        toggleBtn.textContent = '🌙';
+        toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
       } else {
         body.setAttribute('data-theme', 'light');
-        toggleBtn.textContent = '☀️';
+        toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
       }
     }
 
     function toggleDonate() { document.getElementById('donateDropdown').classList.toggle('show'); }
 
     function getStatusClass(status) {
-      if (status.includes("เสร็จ")) return "finished";
-      if (status.includes("กำลัง")) return "in-progress";
-      if (status.includes("รอแปล")) return "pending";
+      if (status.includes("เน€เธชเธฃเนเธ")) return "finished";
+      if (status.includes("เธเธณเธฅเธฑเธ")) return "in-progress";
+      if (status.includes("เธฃเธญเนเธเธฅ")) return "pending";
       if (status.includes("Review")) return "review";
-      if (status.includes("ลบ") || status.includes("หยุด")) return "deleted";
+      if (status.includes("เธฅเธ") || status.includes("เธซเธขเธธเธ”")) return "deleted";
       return "pending";
     }
 
@@ -864,7 +1009,7 @@
       }
     }
 
-    // --- ฟังก์ชันหลักในการแสดงผล UI ---
+    // --- เธเธฑเธเธเนเธเธฑเธเธซเธฅเธฑเธเนเธเธเธฒเธฃเนเธชเธ”เธเธเธฅ UI ---
     function renderContent(data) {
       let htmlList = '';
       let htmlGrid = '';
@@ -889,8 +1034,8 @@
             <td class="icon-cell"><img id="icon-${i}-list" src="${defaultIcon}" loading="lazy"></td>
             <td><span class="status-badge ${statusClass}">${status}</span></td>
             <td><span class="game-name">${gameName}</span></td>
-            <td>${downloadUrl && downloadUrl !== '-' ? `<a href="${downloadUrl}" target="_blank" class="download-link">ดาวน์โหลด</a>` : `<span class="download-link" style="opacity:0.5; pointer-events:none;">ยังไม่อัพ</span>`}</td>
-            <td>${storeUrl ? `<a href="${storeUrl}" target="_blank" class="store-link">ซื้อ</a>` : `-`}</td>
+            <td>${downloadUrl && downloadUrl !== '-' ? `<a href="${downloadUrl}" target="_blank" class="download-link"><i class="fa-solid fa-download"></i> เธ”เธฒเธงเธเนเนเธซเธฅเธ”</a>` : `<span class="download-link" style="opacity:0.5; pointer-events:none;"><i class="fa-solid fa-download"></i> เธขเธฑเธเนเธกเนเธญเธฑเธ</span>`}</td>
+            <td>${storeUrl ? `<a href="${storeUrl}" target="_blank" class="store-link"><i class="fa-brands fa-steam"></i> เธเธทเนเธญ</a>` : `-`}</td>
             <td><span class="update-date">${updateDate}</span></td>
             <td><span class="notes">${notes}</span></td>
             <td><span class="translator">${translator}</span></td>
@@ -906,38 +1051,38 @@
             <div class="grid-item-info">
               <div style="margin-bottom:8px;"><span class="status-badge ${statusClass}">${status}</span></div>
               <div class="grid-item-actions">
-                ${downloadUrl && downloadUrl !== '-' ? `<a href="${downloadUrl}" target="_blank" class="grid-item-action download">ดาวน์โหลด</a>` : ''}
-                ${storeUrl ? `<a href="${storeUrl}" target="_blank" class="grid-item-action price">ซื้อ</a>` : ''}
+                ${downloadUrl && downloadUrl !== '-' ? `<a href="${downloadUrl}" target="_blank" class="grid-item-action download"><i class="fa-solid fa-download"></i> เธ”เธฒเธงเธเนเนเธซเธฅเธ”</a>` : ''}
+                ${storeUrl ? `<a href="${storeUrl}" target="_blank" class="grid-item-action price"><i class="fa-brands fa-steam"></i> เธฃเนเธฒเธ Steam</a>` : ''}
               </div>
               <div style="font-size:12px; color:var(--footer-text); flex-grow:1; margin-top:10px;">${notes}</div>
               <div style="margin-top:10px; font-size:11px; color:var(--footer-text); display:flex; gap:8px;">
-                 <span>👤 ${translator}</span>
-                 <span>📅 ${updateDate}</span>
+                 <span><i class="fa-solid fa-user"></i> ${translator}</span>
+                 <span><i class="fa-solid fa-calendar"></i> ${updateDate}</span>
               </div>
             </div>
           </div>`;
       }
 
-      document.getElementById('table-body').innerHTML = htmlList || '<tr><td colspan="8" style="text-align:center;">ไม่พบข้อมูลที่ค้นหา</td></tr>';
-      document.getElementById('grid-container').innerHTML = htmlGrid || '<div style="padding:20px; text-align:center; width:100%;">ไม่พบข้อมูลที่ค้นหา</div>';
+      document.getElementById('table-body').innerHTML = htmlList || '<tr><td colspan="8" style="text-align:center;">เนเธกเนเธเธเธเนเธญเธกเธนเธฅเธ—เธตเนเธเนเธเธซเธฒ</td></tr>';
+      document.getElementById('grid-container').innerHTML = htmlGrid || '<div style="padding:20px; text-align:center; width:100%;">เนเธกเนเธเธเธเนเธญเธกเธนเธฅเธ—เธตเนเธเนเธเธซเธฒ</div>';
       document.getElementById('stats-container').innerHTML = `
-        <div class="footer-item"><span>📊</span> ทั้งหมด: <strong>${data.length - 1}</strong></div>
-        <div class="footer-item"><span>✅</span> แปลเสร็จ: <strong>${countFinished}</strong></div>`;
+        <div class="footer-item"><span><i class="fa-solid fa-chart-simple"></i></span> เธ—เธฑเนเธเธซเธกเธ”: <strong>${data.length - 1}</strong></div>
+        <div class="footer-item"><span><i class="fa-solid fa-circle-check" style="color: var(--status-finished);"></i></span> เนเธเธฅเน€เธชเธฃเนเธ: <strong>${countFinished}</strong></div>`;
 
-      // โหลดรูป Steam
+      // เนเธซเธฅเธ”เธฃเธนเธ Steam
       data.forEach((item, index) => {
         if(index === 0) return;
         const appId = extractAppId(item[7]);
         if (appId) {
           const lImg = document.getElementById(`icon-${index}-list`);
           const gImg = document.getElementById(`icon-${index}-grid`);
-          if(lImg) lImg.src = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${appId}/capsule_184x69.jpg`;
-          if(gImg) gImg.src = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${appId}/library_600x900.jpg`;
+          if(lImg) { lImg.src = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${appId}/capsule_184x69.jpg`; lImg.onerror = () => { lImg.src = defaultIcon; }; }
+          if(gImg) { gImg.src = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${appId}/library_600x900.jpg`; gImg.onerror = () => { gImg.src = defaultIcon; }; }
         }
       });
     }
 
-    // --- ฟังก์ชันดึงข้อมูลจาก Google Sheets ---
+    // --- เธเธฑเธเธเนเธเธฑเธเธ”เธถเธเธเนเธญเธกเธนเธฅเธเธฒเธ Google Sheets ---
     async function loadMods() {
       try {
         const response = await fetch(sheetUrl);
@@ -947,18 +1092,18 @@
         setTimeout(() => document.getElementById('loadingOverlay').classList.remove('show'), 500);
       } catch (error) {
         console.error('Error:', error);
-        document.getElementById('table-body').innerHTML = '<tr><td colspan="8" style="color:red; text-align:center;">เกิดข้อผิดพลาดในการโหลดข้อมูล</td></tr>';
+        document.getElementById('table-body').innerHTML = '<tr><td colspan="8" style="color:red; text-align:center;">เน€เธเธดเธ”เธเนเธญเธเธดเธ”เธเธฅเธฒเธ”เนเธเธเธฒเธฃเนเธซเธฅเธ”เธเนเธญเธกเธนเธฅ</td></tr>';
         document.getElementById('loadingOverlay').classList.remove('show');
       }
     }
 
-    // --- ฟังก์ชันค้นหาและกรอง ---
+    // --- เธเธฑเธเธเนเธเธฑเธเธเนเธเธซเธฒเนเธฅเธฐเธเธฃเธญเธ ---
     function filterData() {
       const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
       const statusValue = document.getElementById('statusFilter').value;
 
       const filtered = allData.filter((item, index) => {
-        if (index === 0) return true; // เก็บหัวตารางไว้
+        if (index === 0) return true; // เน€เธเนเธเธซเธฑเธงเธ•เธฒเธฃเธฒเธเนเธงเน
         const matchesSearch = item[2].toLowerCase().includes(searchTerm);
         const matchesStatus = statusValue === '' || item[1] === statusValue;
         return matchesSearch && matchesStatus;
@@ -968,6 +1113,40 @@
     }
 
     window.addEventListener('DOMContentLoaded', loadMods);
+
+    // Scroll collapse for sticky bar
+    let lastScrollY = 0;
+    let scrollTicking = false;
+
+    window.addEventListener('scroll', () => {
+      if (!scrollTicking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+          const stickyBar = document.getElementById('stickyBar');
+
+          if (currentScrollY > 40) {
+            if (currentScrollY > lastScrollY + 5) {
+              stickyBar.classList.add('collapsed');
+            } else if (currentScrollY < lastScrollY - 5) {
+              stickyBar.classList.remove('collapsed');
+            }
+          } else {
+            stickyBar.classList.remove('collapsed');
+          }
+
+          lastScrollY = currentScrollY;
+          scrollTicking = false;
+        });
+        scrollTicking = true;
+      }
+    });
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
