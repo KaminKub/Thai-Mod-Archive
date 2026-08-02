@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>เธฃเธงเธกเธกเนเธญเธ”เนเธเธฅเนเธ—เธขเน€เธเธก PCVR By KaminKub</title>
+  <title>รวมม็อดแปลไทยเกม PCVR By KaminKub</title>
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://kaminkub.github.io/Thai-Mod-Archive/">
-  <meta property="og:title" content="เธฃเธงเธกเธกเนเธญเธ”เนเธเธฅเนเธ—เธขเน€เธเธก PCVR By KaminKub">
-  <meta property="og:description" content="เน€เธเนเธเธชเธ–เธฒเธเธฐเธเธฒเธฃเนเธเธฅเนเธฅเธฐเธ”เธฒเธงเธเนเนเธซเธฅเธ”เธกเนเธญเธ”เธ เธฒเธฉเธฒเนเธ—เธขเธฅเนเธฒเธชเธธเธ”เนเธ”เนเธ—เธตเนเธเธเธตเน">
+  <meta property="og:title" content="รวมม็อดแปลไทยเกม PCVR By KaminKub">
+  <meta property="og:description" content="เช็กสถานะการแปลและดาวน์โหลดม็อดภาษาไทยล่าสุดได้ที่นนี่">
   <meta property="og:image" content="https://kaminkub.github.io/Thai-Mod-Archive/logo.png">
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://kaminkub.github.io/Thai-Mod-Archive/">
-  <meta property="twitter:title" content="เธฃเธงเธกเธกเนเธญเธ”เนเธเธฅเนเธ—เธขเน€เธเธก PCVR By KaminKub">
-  <meta property="twitter:description" content="เน€เธเนเธเธชเธ–เธฒเธเธฐเธเธฒเธฃเนเธเธฅเนเธฅเธฐเธ”เธฒเธงเธเนเนเธซเธฅเธ”เธกเนเธญเธ”เธ เธฒเธฉเธฒเนเธ—เธขเธฅเนเธฒเธชเธธเธ”เนเธ”เนเธ—เธตเนเธเธเธตเน">
+  <meta property="twitter:title" content="รวมม็อดแปลไทยเกม PCVR By KaminKub">
+  <meta property="twitter:description" content="เช็กสถานะการแปลและดาวน์โหลดม็อดภาษาไทยล่าสุดได้ที่นนี่">
   <meta property="twitter:image" content="https://kaminkub.github.io/Thai-Mod-Archive/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com/">
   <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
@@ -44,6 +44,7 @@
       --footer-bg: #161b22;
       --footer-text: #8b949e;
       --footer-strong: #58a6ff;
+      --sticky-bg: rgba(13, 17, 23, 0.92);
       --legend-text: #8b949e;
       --legend-dot-finished: #39d353;
       --legend-dot-progress: #d29922;
@@ -77,6 +78,7 @@
       --footer-bg: #f8fafc;
       --footer-text: #5f6368;
       --footer-strong: #1565C0;
+      --sticky-bg: rgba(255, 255, 255, 0.92);
       --legend-text: #5f6368;
       --legend-dot-finished: #e8f5e9;
       --legend-dot-progress: #fff3e0;
@@ -137,7 +139,7 @@
       position: sticky;
       top: 0;
       z-index: 50;
-      background: transparent;
+      background: var(--sticky-bg);
       transition: all 0.3s ease;
     }
 
@@ -148,8 +150,7 @@
       padding: 12px 0;
       flex-wrap: wrap;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      overflow: hidden;
-      max-height: 60px;
+      overflow: visible;
     }
 
     .header-btn {
@@ -167,7 +168,7 @@
       cursor: pointer;
       white-space: nowrap;
       border: 1.5px solid var(--btn-border);
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.2) 100%);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.4) 100%);
     }
 
     .header-btn:hover {
@@ -191,8 +192,8 @@
     }
 
     .donate-btn {
-      background: linear-gradient(135deg, rgba(255, 165, 2, 0.15) 0%, rgba(255, 165, 2, 0.25) 100%);
-      color: #ff9800;
+      background: linear-gradient(135deg, rgba(255, 165, 2, 0.45) 0%, rgba(255, 165, 2, 0.6) 100%);
+      color: #ffffff;
       border-color: rgba(255, 165, 2, 0.3);
     }
 
@@ -721,6 +722,7 @@
       padding-top: 0;
       padding-bottom: 0;
       opacity: 0;
+      visibility: hidden;
       pointer-events: none;
     }
 
@@ -848,50 +850,67 @@
       font-size: 12px;
       margin-right: 4px;
     }
+
+    /* FA icon colors */
+    .header h1 .fa-list { color: #ffd166; }
+    .header-btn .fa-solid,
+    .header-btn .fa-brands { color: #ffd166; }
+    .view-toggle-btn .fa-table-list { color: #4fc3f7; }
+    .view-toggle-btn .fa-table-cells { color: #81c784; }
+    .theme-toggle .fa-moon { color: #ffe066; }
+    .theme-toggle .fa-sun { color: #ffb300; }
+    .download-link .fa-download { color: #64b5f6; }
+    .store-link .fa-steam,
+    .grid-item-action.price .fa-steam { color: #00adee; }
+    .grid-item-action.download .fa-download { color: #64b5f6; }
+    .footer-item .fa-chart-simple { color: #ba68c8; }
+    .footer-item .fa-circle-check { color: #39d353; }
+    .grid-item-info .fa-user { color: #ffb74d; }
+    .grid-item-info .fa-calendar { color: #4dd0e1; }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
       <h1><i class="fa-solid fa-list"></i> รวมม็อดแปลไทยเกม PCVR</h1>
-      <p>เธ•เธดเธ”เธ•เธฒเธกเธชเธ–เธฒเธเธฐเธเธฒเธฃเนเธเธฅ By KaminKub</p>
-      <p>*เนเธเธฅเน€เธเธทเนเธญเน€เธฅเนเธเน€เธญเธ* เธชเนเธงเธเนเธซเธเนเธเธฐเน€เธเนเธเธเธฒเธฃเนเธเธฅเธเธธเธ“เธ เธฒเธเธ•เนเธณ...เธเธญเธญเธ เธฑเธขเธซเธฒเธเนเธกเนเธ–เธนเธเนเธ๐โ€โ๏ธ</p>
+      <p>ติดตามสถานะการแปล By KaminKub</p>
+      <p>*แปลเพื่อเล่นเอง* ส่วนใหญ่จะเป็นการแปลคุณภาพต่ำ...ขออภัยหากไม่ถูกใจ🙇‍♂️</p>
     </div>
 
     <div class="sticky-bar" id="stickyBar">
     <div class="button-container" id="buttonContainer">
       <a href="https://www.openlink.co/kaminkub" class="header-btn" target="_blank">
         <i class="fa-solid fa-bullhorn header-fa-icon"></i>
-        <span class="btn-label">เธ•เธดเธ”เธ•เธฒเธกเธเธฅเธเธฒเธ</span>
+        <span class="btn-label">ติดตามผลงาน</span>
       </a>
 
       <div class="donate-wrapper">
         <div class="header-btn donate-btn" id="donateBtn" onclick="toggleDonate()">
           <img src="./mod-tracking-table_files/coffee.png" class="icon-img" alt="" width="30" height="30">
-          <span class="btn-label">เน€เธฅเธตเนเธขเธเธเธฒเนเธเธเธก</span>
+          <span class="btn-label">เลี้ยงกาแฟผม</span>
         </div>
         <div class="donate-dropdown" id="donateDropdown">
           <a href="https://tipkub.me/kaminkub" target="_blank">
             <img src="./mod-tracking-table_files/tipkub.jpg" alt="" width="70" height="70">
-            เน€เธฅเธตเนเธขเธเธเนเธฒเธ TipKub
+            เลี้ยงผ่าน TipKub
           </a>
           <a href="https://easydonate.app/kaminkub" target="_blank">
             <img src="./mod-tracking-table_files/favicon.png" alt="" width="70" height="70">
-            เน€เธฅเธตเนเธขเธเธเนเธฒเธ EasyDonate
+            เลี้ยงผ่าน EasyDonate
           </a>
         </div>
       </div>
     </div>
 
     <div class="filter-container" id="filterContainer">
-      <input type="text" id="searchInput" placeholder="๐” เธเนเธเธซเธฒเธเธทเนเธญเน€เธเธก..." oninput="filterData()">
+      <input type="text" id="searchInput" placeholder="🔍 ค้นหาชื่อเกม..." oninput="filterData()">
       
       <select id="statusFilter" onchange="filterData()">
-        <option value="">เธชเธ–เธฒเธเธฐเธ—เธฑเนเธเธซเธกเธ”</option>
-        <option value="โ… เนเธเธฅเน€เธชเธฃเนเธเนเธฅเนเธง">เนเธเธฅเน€เธชเธฃเนเธเนเธฅเนเธง</option>
-        <option value="๐“ เธฃเธญ Review">เธฃเธญ Review</option>
-        <option value="๐” เธเธณเธฅเธฑเธเนเธเธฅ">เธเธณเธฅเธฑเธเนเธเธฅ</option>
-        <option value="๐“ เธฃเธญเนเธเธฅ">เธฃเธญเนเธเธฅ</option>
+        <option value="">สถานะทั้งหมด</option>
+        <option value="✅ แปลเสร็จแล้ว">แปลเสร็จแล้ว</option>
+        <option value="📝 รอ Review">รอ Review</option>
+        <option value="🔄 กำลังแปล">กำลังแปล</option>
+        <option value="📋 รอแปล">รอแปล</option>
       </select>
     </div>
     </div>
@@ -899,11 +918,11 @@
     <div class="view-toggle-container" id="viewToggleContainer">
       <button class="view-toggle-btn active" id="listViewBtn" onclick="setView('list')">
         <i class="fa-solid fa-table-list toggle-icon"></i>
-        <span class="toggle-label">เธ•เธฒเธฃเธฒเธ</span>
+        <span class="toggle-label">ตาราง</span>
       </button>
       <button class="view-toggle-btn" id="gridViewBtn" onclick="setView('grid')">
         <i class="fa-solid fa-table-cells toggle-icon"></i>
-        <span class="toggle-label">เธเธเน€เธเธก</span>
+        <span class="toggle-label">ปกเกม</span>
       </button>
     </div>
 
@@ -914,17 +933,17 @@
         <thead>
           <tr>
             <th style="width: 56px;"></th>
-            <th>เธชเธ–เธฒเธเธฐเนเธเธฅ</th>
-            <th>เธเธทเนเนเธญเน€เธเธก</th>
-            <th>เนเธซเธฅเธ”เธกเนเธญเธ”</th>
-            <th>เธซเธเนเธฒเธฃเนเธฒเธเธเนเธฒ</th>
-            <th>เธงเธฑเธเธ—เธตเนเธญเธฑเธเน€เธ”เธ•</th>
-            <th>เธซเธกเธฒเธขเน€เธซเธ•เธธ</th>
-            <th>เธเธนเนเนเธเธฅ</th>
+            <th>สถานะแปล</th>
+            <th>ชื่่อเกม</th>
+            <th>โหลดม็อด</th>
+            <th>หน้าร้านค้า</th>
+            <th>วันที่อัปเดต</th>
+            <th>หมายเหตุ</th>
+            <th>ผู้แปล</th>
           </tr>
         </thead>
         <tbody id="table-body">
-          <tr><td colspan="8" style="text-align:left;">เธเธณเธฅเธฑเธเนเธซเธฅเธ”เธเนเธญเธกเธนเธฅ...</td></tr>
+          <tr><td colspan="8" style="text-align:left;">กำลังโหลดข้อมูล...</td></tr>
         </tbody>
       </table>
     </div>
@@ -940,19 +959,19 @@
     <div class="footer">
       <div id="stats-container" style="display: flex; gap: 24px;"></div>
       <div class="legend">
-        <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-finished);"></span>เนเธเธฅเน€เธชเธฃเนเธเนเธฅเนเธง</div>
-        <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-progress);"></span>เธเธณเธฅเธฑเธเนเธเธฅ</div>
-        <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-pending);"></span>เธฃเธญเนเธเธฅ</div>
-        <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-review);"></span>เธฃเธญ Review</div>
-        <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-deleted);"></span>เธฅเธเธญเธญเธเนเธเนเธฅเนเธง/เธซเธขเธธเธ”เธเธฑเนเธงเธเธฃเธฒเธง</div>
+        <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-finished);"></span>แปลเสร็จแล้ว</div>
+        <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-progress);"></span>กำลังแปล</div>
+        <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-pending);"></span>รอแปล</div>
+        <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-review);"></span>รอ Review</div>
+        <div class="legend-item"><span class="legend-dot" style="background: var(--legend-dot-deleted);"></span>ลบออกไปแล้ว/หยุดชั่วคราว</div>
       </div>
     </div>
   </div>
 
   <script>
-    let allData = []; // เธ•เธฑเธงเนเธเธฃเธเธฅเธฒเธเน€เธเนเธเธเนเธญเธกเธนเธฅเธ—เธฑเนเธเธซเธกเธ”
+    let allData = []; // ตัวแปรกลางเก็บข้อมูลทั้งหมด
     const sheetUrl = 'https://script.google.com/macros/s/AKfycbz_aw9IF7u9D-2G5q8ppHT_K-kNRhO4HTXWUEU5PGOz-7uDAn2OmVmiS6MZGiFd2duh/exec';
-    const defaultIcon = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 48 48%22%3E%3Crect width=%2248%22 height=%2248%22 fill=%22%2330363d%22 rx=%228%22%2F%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 fill=%22%238b949e%22 font-family=%22sans-serif%22 font-size=%2214%22%3E๐ฎ%3C%2Ftext%3E%3C%2Fsvg%3E';
+    const defaultIcon = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 48 48%22%3E%3Crect width=%2248%22 height=%2248%22 fill=%22%2330363d%22 rx=%228%22%2F%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 fill=%22%238b949e%22 font-family=%22sans-serif%22 font-size=%2214%22%3E🎮%3C%2Ftext%3E%3C%2Fsvg%3E';
 
     function toggleTheme() {
       const body = document.body;
@@ -969,11 +988,11 @@
     function toggleDonate() { document.getElementById('donateDropdown').classList.toggle('show'); }
 
     function getStatusClass(status) {
-      if (status.includes("เน€เธชเธฃเนเธ")) return "finished";
-      if (status.includes("เธเธณเธฅเธฑเธ")) return "in-progress";
-      if (status.includes("เธฃเธญเนเธเธฅ")) return "pending";
+      if (status.includes("เสร็จ")) return "finished";
+      if (status.includes("กำลัง")) return "in-progress";
+      if (status.includes("รอแปล")) return "pending";
       if (status.includes("Review")) return "review";
-      if (status.includes("เธฅเธ") || status.includes("เธซเธขเธธเธ”")) return "deleted";
+      if (status.includes("ลบ") || status.includes("หยุด")) return "deleted";
       return "pending";
     }
 
@@ -1009,7 +1028,7 @@
       }
     }
 
-    // --- เธเธฑเธเธเนเธเธฑเธเธซเธฅเธฑเธเนเธเธเธฒเธฃเนเธชเธ”เธเธเธฅ UI ---
+    // --- ฟังก์ชันหลักในการแสดงผล UI ---
     function renderContent(data) {
       let htmlList = '';
       let htmlGrid = '';
@@ -1034,8 +1053,8 @@
             <td class="icon-cell"><img id="icon-${i}-list" src="${defaultIcon}" loading="lazy"></td>
             <td><span class="status-badge ${statusClass}">${status}</span></td>
             <td><span class="game-name">${gameName}</span></td>
-            <td>${downloadUrl && downloadUrl !== '-' ? `<a href="${downloadUrl}" target="_blank" class="download-link"><i class="fa-solid fa-download"></i> เธ”เธฒเธงเธเนเนเธซเธฅเธ”</a>` : `<span class="download-link" style="opacity:0.5; pointer-events:none;"><i class="fa-solid fa-download"></i> เธขเธฑเธเนเธกเนเธญเธฑเธ</span>`}</td>
-            <td>${storeUrl ? `<a href="${storeUrl}" target="_blank" class="store-link"><i class="fa-brands fa-steam"></i> เธเธทเนเธญ</a>` : `-`}</td>
+            <td>${downloadUrl && downloadUrl !== '-' ? `<a href="${downloadUrl}" target="_blank" class="download-link"><i class="fa-solid fa-download"></i> ดาวน์โหลด</a>` : `<span class="download-link" style="opacity:0.5; pointer-events:none;"><i class="fa-solid fa-download"></i> ยังไม่อัพ</span>`}</td>
+            <td>${storeUrl ? `<a href="${storeUrl}" target="_blank" class="store-link"><i class="fa-brands fa-steam"></i> ซื้อ</a>` : `-`}</td>
             <td><span class="update-date">${updateDate}</span></td>
             <td><span class="notes">${notes}</span></td>
             <td><span class="translator">${translator}</span></td>
@@ -1051,8 +1070,8 @@
             <div class="grid-item-info">
               <div style="margin-bottom:8px;"><span class="status-badge ${statusClass}">${status}</span></div>
               <div class="grid-item-actions">
-                ${downloadUrl && downloadUrl !== '-' ? `<a href="${downloadUrl}" target="_blank" class="grid-item-action download"><i class="fa-solid fa-download"></i> เธ”เธฒเธงเธเนเนเธซเธฅเธ”</a>` : ''}
-                ${storeUrl ? `<a href="${storeUrl}" target="_blank" class="grid-item-action price"><i class="fa-brands fa-steam"></i> เธฃเนเธฒเธ Steam</a>` : ''}
+                ${downloadUrl && downloadUrl !== '-' ? `<a href="${downloadUrl}" target="_blank" class="grid-item-action download"><i class="fa-solid fa-download"></i> ดาวน์โหลด</a>` : ''}
+                ${storeUrl ? `<a href="${storeUrl}" target="_blank" class="grid-item-action price"><i class="fa-brands fa-steam"></i> ร้าน Steam</a>` : ''}
               </div>
               <div style="font-size:12px; color:var(--footer-text); flex-grow:1; margin-top:10px;">${notes}</div>
               <div style="margin-top:10px; font-size:11px; color:var(--footer-text); display:flex; gap:8px;">
@@ -1063,13 +1082,13 @@
           </div>`;
       }
 
-      document.getElementById('table-body').innerHTML = htmlList || '<tr><td colspan="8" style="text-align:center;">เนเธกเนเธเธเธเนเธญเธกเธนเธฅเธ—เธตเนเธเนเธเธซเธฒ</td></tr>';
-      document.getElementById('grid-container').innerHTML = htmlGrid || '<div style="padding:20px; text-align:center; width:100%;">เนเธกเนเธเธเธเนเธญเธกเธนเธฅเธ—เธตเนเธเนเธเธซเธฒ</div>';
+      document.getElementById('table-body').innerHTML = htmlList || '<tr><td colspan="8" style="text-align:center;">ไม่พบข้อมูลที่ค้นหา</td></tr>';
+      document.getElementById('grid-container').innerHTML = htmlGrid || '<div style="padding:20px; text-align:center; width:100%;">ไม่พบข้อมูลที่ค้นหา</div>';
       document.getElementById('stats-container').innerHTML = `
-        <div class="footer-item"><span><i class="fa-solid fa-chart-simple"></i></span> เธ—เธฑเนเธเธซเธกเธ”: <strong>${data.length - 1}</strong></div>
-        <div class="footer-item"><span><i class="fa-solid fa-circle-check" style="color: var(--status-finished);"></i></span> เนเธเธฅเน€เธชเธฃเนเธ: <strong>${countFinished}</strong></div>`;
+        <div class="footer-item"><span><i class="fa-solid fa-chart-simple"></i></span> ทั้งหมด: <strong>${data.length - 1}</strong></div>
+        <div class="footer-item"><span><i class="fa-solid fa-circle-check" style="color: var(--status-finished);"></i></span> แปลเสร็จ: <strong>${countFinished}</strong></div>`;
 
-      // เนเธซเธฅเธ”เธฃเธนเธ Steam
+      // โหลดรูป Steam
       data.forEach((item, index) => {
         if(index === 0) return;
         const appId = extractAppId(item[7]);
@@ -1082,7 +1101,7 @@
       });
     }
 
-    // --- เธเธฑเธเธเนเธเธฑเธเธ”เธถเธเธเนเธญเธกเธนเธฅเธเธฒเธ Google Sheets ---
+    // --- ฟังก์ชันดึงข้อมูลจาก Google Sheets ---
     async function loadMods() {
       try {
         const response = await fetch(sheetUrl);
@@ -1092,18 +1111,18 @@
         setTimeout(() => document.getElementById('loadingOverlay').classList.remove('show'), 500);
       } catch (error) {
         console.error('Error:', error);
-        document.getElementById('table-body').innerHTML = '<tr><td colspan="8" style="color:red; text-align:center;">เน€เธเธดเธ”เธเนเธญเธเธดเธ”เธเธฅเธฒเธ”เนเธเธเธฒเธฃเนเธซเธฅเธ”เธเนเธญเธกเธนเธฅ</td></tr>';
+        document.getElementById('table-body').innerHTML = '<tr><td colspan="8" style="color:red; text-align:center;">เกิดข้อผิดพลาดในการโหลดข้อมูล</td></tr>';
         document.getElementById('loadingOverlay').classList.remove('show');
       }
     }
 
-    // --- เธเธฑเธเธเนเธเธฑเธเธเนเธเธซเธฒเนเธฅเธฐเธเธฃเธญเธ ---
+    // --- ฟังก์ชันค้นหาและกรอง ---
     function filterData() {
       const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
       const statusValue = document.getElementById('statusFilter').value;
 
       const filtered = allData.filter((item, index) => {
-        if (index === 0) return true; // เน€เธเนเธเธซเธฑเธงเธ•เธฒเธฃเธฒเธเนเธงเน
+        if (index === 0) return true; // เก็บหัวตารางไว้
         const matchesSearch = item[2].toLowerCase().includes(searchTerm);
         const matchesStatus = statusValue === '' || item[1] === statusValue;
         return matchesSearch && matchesStatus;
