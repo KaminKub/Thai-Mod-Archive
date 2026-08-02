@@ -144,6 +144,7 @@
       gap: 10px;
       padding: 12px 0;
       flex-wrap: wrap;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       overflow: visible;
     }
 
@@ -380,8 +381,8 @@
     }
 
     .icon-cell img {
-      width: var(--icon-size);
-      height: var(--icon-size);
+      width: 184px;
+      height: 69px;
       object-fit: cover;
       object-position: center;
       border-radius: 6px;
@@ -442,7 +443,7 @@
       background: rgba(255, 0, 85, 0.15);
       border-radius: 8px;
       text-decoration: none;
-      color: #ff0055;
+      color: #2db9ff;
       font-size: 13px;
       font-weight: 500;
       transition: all 0.2s ease;
@@ -612,7 +613,7 @@
 
     .grid-item-action.price {
       background: rgba(255, 0, 85, 0.25);
-      color: #ff4d94;
+      color: #2db9ff;
       border: 1px solid rgba(255, 77, 148, 0.5);
     }
 
@@ -701,13 +702,14 @@
     }
 
     @media (max-width: 400px) {
-      :root { --grid-card-width: 190px; --icon-size: 36px; }
+      :root { --grid-card-width: 190px; }
       .grid-item { border-radius: 12px; }
       .grid-item-image { padding: 8px; }
       .grid-item-image img { max-height: 220px; }
       .grid-item-title { font-size: 12px; padding: 6px 8px; }
       .grid-item-info { padding: 10px; }
       .grid-item-action { padding: 6px 8px; font-size: 11px; min-width: 80px; }
+      .icon-cell img { width: 36px; height: 36px; }
     }
 
     /* Collapse animation for sticky bar */
@@ -861,6 +863,15 @@
     .footer-item .fa-circle-check { color: #39d353; }
     .grid-item-info .fa-user { color: #ffb74d; }
     .grid-item-info .fa-calendar { color: #4dd0e1; }
+
+    /* Mobile: keep header-btn icon size in sync with donate icon-img */
+    @media (max-width: 768px) {
+      .header-btn .fa-solid.header-fa-icon {
+        font-size: 20px;
+        width: 24px;
+        height: 24px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1048,7 +1059,7 @@
             <td><span class="status-badge ${statusClass}">${status}</span></td>
             <td><span class="game-name">${gameName}</span></td>
             <td>${downloadUrl && downloadUrl !== '-' ? `<a href="${downloadUrl}" target="_blank" class="download-link"><i class="fa-solid fa-download"></i> ดาวน์โหลด</a>` : `<span class="download-link" style="opacity:0.5; pointer-events:none;"><i class="fa-solid fa-download"></i> ยังไม่อัพ</span>`}</td>
-            <td>${storeUrl ? `<a href="${storeUrl}" target="_blank" class="store-link"><i class="fa-brands fa-steam"></i> ซื้อ</a>` : `-`}</td>
+            <td>${storeUrl ? `<a href="${storeUrl}" target="_blank" class="store-link"><i class="fa-brands fa-steam"></i> Steam</a>` : `-`}</td>
             <td><span class="update-date">${updateDate}</span></td>
             <td><span class="notes">${notes}</span></td>
             <td><span class="translator">${translator}</span></td>
@@ -1089,7 +1100,13 @@
         if (appId) {
           const lImg = document.getElementById(`icon-${index}-list`);
           const gImg = document.getElementById(`icon-${index}-grid`);
-          if(lImg) { lImg.src = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${appId}/capsule_184x69.jpg`; lImg.onerror = () => { lImg.src = defaultIcon; }; }
+          if(lImg) {
+            lImg.src = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${appId}/capsule_184x69.jpg`;
+            lImg.onerror = () => {
+              lImg.src = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${appId}/header.jpg`;
+              lImg.onerror = () => { lImg.src = defaultIcon; };
+            };
+          }
           if(gImg) { gImg.src = `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${appId}/library_600x900.jpg`; gImg.onerror = () => { gImg.src = defaultIcon; }; }
         }
       });
@@ -1130,28 +1147,35 @@
     // Scroll collapse for sticky bar
     let lastScrollY = 0;
     let scrollTicking = false;
+    let collapseCooldown = 0;
 
     window.addEventListener('scroll', () => {
-      if (!scrollTicking) {
-        window.requestAnimationFrame(() => {
-          const currentScrollY = window.scrollY;
-          const stickyBar = document.getElementById('stickyBar');
+      if (scrollTicking) return;
+      scrollTicking = true;
+      window.requestAnimationFrame(() => {
+        const currentScrollY = window.scrollY;
+        const stickyBar = document.getElementById('stickyBar');
+
+        if (Date.now() >= collapseCooldown) {
+          const isCollapsed = stickyBar.classList.contains('collapsed');
 
           if (currentScrollY > 40) {
-            if (currentScrollY > lastScrollY + 5) {
+            if (currentScrollY > lastScrollY + 5 && !isCollapsed) {
               stickyBar.classList.add('collapsed');
-            } else if (currentScrollY < lastScrollY - 5) {
+              collapseCooldown = Date.now() + 400;
+            } else if (currentScrollY < lastScrollY - 5 && isCollapsed) {
               stickyBar.classList.remove('collapsed');
+              collapseCooldown = Date.now() + 400;
             }
-          } else {
+          } else if (isCollapsed) {
             stickyBar.classList.remove('collapsed');
+            collapseCooldown = Date.now() + 400;
           }
+        }
 
-          lastScrollY = currentScrollY;
-          scrollTicking = false;
-        });
-        scrollTicking = true;
-      }
+        lastScrollY = currentScrollY;
+        scrollTicking = false;
+      });
     });
   </script>
 </body>
