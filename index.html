@@ -668,16 +668,6 @@
       transition: width 0.3s ease;
     }
 
-    .progress-bar-fill.indeterminate {
-      width: 40%;
-      animation: progress-indeterminate 1.5s ease-in-out infinite;
-    }
-
-    @keyframes progress-indeterminate {
-      0%   { transform: translateX(-100%); }
-      100% { transform: translateX(350%); }
-    }
-
     .progress-text {
       margin-top: 12px;
       font-family: 'Kanit', sans-serif;
@@ -953,11 +943,11 @@
     </div>
 
     <div class="view-toggle-container" id="viewToggleContainer">
-      <button class="view-toggle-btn active" id="listViewBtn" onclick="setView('list')">
+      <button class="view-toggle-btn" id="listViewBtn" onclick="setView('list')">
         <i class="fa-solid fa-table-list toggle-icon"></i>
         <span class="toggle-label">ตาราง</span>
       </button>
-      <button class="view-toggle-btn" id="gridViewBtn" onclick="setView('grid')">
+      <button class="view-toggle-btn active" id="gridViewBtn" onclick="setView('grid')">
         <i class="fa-solid fa-table-cells toggle-icon"></i>
         <span class="toggle-label">ปกเกม</span>
       </button>
@@ -1156,60 +1146,33 @@
       const fill = document.getElementById('progressFill');
       const text = document.getElementById('progressText');
 
-      document.getElementById('grid-container').classList.add('show');
+      setView('grid'); // show grid-container first so loading bar is visible
       overlay.classList.add('show');
+      fill.style.width = '0%';
+      text.textContent = 'กำลังโหลด...';
+
+      // ponytail: fake progress 0→85% over ~2s, jump 100% when data lands.
+      // Google Apps Script uses chunked encoding → no Content-Length → real % impossible without backend change.
+      let fakePct = 0;
+      const tick = setInterval(() => {
+        fakePct += (85 - fakePct) * 0.15; // decelerate toward 85%
+        fill.style.width = Math.round(fakePct) + '%';
+      }, 100);
 
       try {
-        const data = await new Promise((resolve, reject) => {
-          const xhr = new XMLHttpRequest();
-          xhr.open('GET', sheetUrl);
-
-          xhr.onprogress = (e) => {
-            if (e.lengthComputable) {
-              const pct = Math.round((e.loaded / e.total) * 100);
-              fill.style.width = pct + '%';
-              fill.classList.remove('indeterminate');
-              text.textContent = 'กำลังโหลด... ' + pct + '%';
-            } else {
-              // fallback: indeterminate shimmer
-              if (!fill.classList.contains('indeterminate')) {
-                fill.classList.add('indeterminate');
-                text.textContent = 'กำลังโหลด...';
-              }
-            }
-          };
-
-          xhr.onload = () => {
-            if (xhr.status >= 200 && xhr.status < 300) {
-              try {
-                resolve(JSON.parse(xhr.responseText));
-              } catch (e) {
-                reject(new Error('JSON parse failed'));
-              }
-            } else {
-              reject(new Error('HTTP ' + xhr.status));
-            }
-          };
-
-          xhr.onerror = () => reject(new Error('Network error'));
-          xhr.ontimeout = () => reject(new Error('Timeout'));
-          xhr.timeout = 30000; // 30s timeout
-          xhr.send();
-        });
-
-        allData = data;
+        const response = await fetch(sheetUrl);
+        allData = await response.json();
         renderContent(allData);
         setView('grid');
 
-        // จบ → เติม 100% แล้ว fade
+        clearInterval(tick);
         fill.style.width = '100%';
-        fill.classList.remove('indeterminate');
         text.textContent = 'โหลดเสร็จ!';
-        setTimeout(() => overlay.classList.remove('show'), 500);
+        setTimeout(() => overlay.classList.remove('show'), 400);
 
       } catch (error) {
         console.error('Error:', error);
-        setView('list');
+        clearInterval(tick);
         overlay.classList.remove('show');
         document.getElementById('table-body').innerHTML =
           '<tr><td colspan="8" style="color:var(--status-deleted); text-align:center;">⚠️ เกิดข้อผิดพลาดในการโหลดข้อมูล — <a href="javascript:location.reload()" style="color:var(--link-color);">ลองใหม่</a></td></tr>';
