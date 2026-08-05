@@ -1000,8 +1000,20 @@
 
   <script>
     let allData = []; // ตัวแปรกลางเก็บข้อมูลทั้งหมด
-    const sheetUrl = 'https://script.google.com/macros/s/AKfycbz_aw9IF7u9D-2G5q8ppHT_K-kNRhO4HTXWUEU5PGOz-7uDAn2OmVmiS6MZGiFd2duh/exec';
     const defaultIcon = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 48 48%22%3E%3Crect width=%2248%22 height=%2248%22 fill=%22%2330363d%22 rx=%228%22%2F%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 fill=%22%238b949e%22 font-family=%22sans-serif%22 font-size=%2214%22%3E🎮%3C%2Ftext%3E%3C%2Fsvg%3E';
+
+    // === Cache & Data Source Config ===
+    const CACHE_KEY = 'mod-list-v1';
+    const CACHE_TTL = 10 * 60 * 1000; // 10 นาที
+
+    // Data sources — เรียงตาม priority (เร็วสุด → ช้าสุด)
+    // เว้นว่างไว้ถ้ายังไม่ได้ตั้งค่า source นั้น
+    const SHEETS_API_KEY = 'AIzaSyAMIFUAcy4mwUKZxuPoAbUnG9qnsjQ8Fzk';  // ใส่ API key จาก Google Cloud Console
+    const SHEETS_ID = '1gfeoBr5SY5yyzJIRDElJ03rN_o-snOh6T7pZQmqSZXs';  // spreadsheet ID (เอามาจาก URL ของ sheet)
+    const SHEETS_RANGE = 'mod-tracking-csv!A1:I'; // range ที่ต้องการ
+    const CSV_PUBLISH_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT7bYelaGENVAeNnQVV0GYZ0_GYboL_ZoLOuEYU3k8MSzpVYqVVhvocabZXZI7SdvxMXMCZF_2Pq17u/pub?gid=1409791797&single=true&output=csv'; // URL จาก File → Share → Publish to web → CSV
+    // Apps Script URL (fallback สุดท้าย — source ปัจจุบัน)
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz_aw9IF7u9D-2G5q8ppHT_K-kNRhO4HTXWUEU5PGOz-7uDAn2OmVmiS6MZGiFd2duh/exec';
 
     function toggleTheme() {
       const body = document.body;
@@ -1140,43 +1152,137 @@
       });
     }
 
+    // --- Cache & Data Source helpers ---
+    function getCachedData() {
+      try {
+        const raw = localStorage.getItem(CACHE_KEY);
+        if (!raw) return null;
+        const cache = JSON.parse(raw);
+        if (Date.now() - cache.timestamp > CACHE_TTL) return null; // หมดอายุ
+        return cache.data;
+      } catch (e) { return null; }
+    }
+
+    function setCachedData(data) {
+      try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify({ data, timestamp: Date.now() }));
+      } catch (e) { /* quota exceeded — silent fail */ }
+    }
+
+    function parseCSV(csvText) {
+      const rows = [];
+      const lines = csvText.split(/\r?\n/);
+      for (const line of lines) {
+        if (!line.trim()) continue;
+        const cols = [];
+        let col = '', inQuotes = false;
+        for (const ch of line) {
+          if (ch === '"') { inQuotes = !inQuotes; }
+          else if (ch === ',' && !inQuotes) { cols.push(col.trim()); col = ''; }
+          else { col += ch; }
+        }
+        cols.push(col.trim());
+        rows.push(cols);
+      }
+      return rows;
+    }
+
+    async function tryFetch(url, options = {}) {
+      // ponytail: AbortSignal.timeout ไม่มีใน browser เก่า → fallback เป็น fetch ธรรมดา (ไม่ timeout)
+      if (typeof AbortSignal !== 'undefined' && AbortSignal.timeout) {
+        const resp = await fetch(url, { signal: AbortSignal.timeout(8000), ...options });
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        return resp;
+      }
+      const resp = await fetch(url, options);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      return resp;
+    }
+
     // --- ฟังก์ชันดึงข้อมูลจาก Google Sheets ---
     async function loadMods() {
       const overlay = document.getElementById('loadingOverlay');
       const fill = document.getElementById('progressFill');
       const text = document.getElementById('progressText');
 
-      setView('grid'); // show grid-container first so loading bar is visible
-      overlay.classList.add('show');
-      fill.style.width = '0%';
-      text.textContent = 'กำลังโหลด...';
+      // 1. ลอง render จาก cache ก่อน — เลื่อนดูได้ทันที ไม่มี overlay บัง
+      const cached = getCachedData();
+      if (cached) {
+        allData = cached;
+        renderContent(allData);
+        setView('grid');
+      } else {
+        setView('grid'); // show grid-container first so loading bar is visible
+        overlay.classList.add('show');
+        fill.style.width = '0%';
+        text.textContent = 'กำลังโหลด...';
+      }
 
-      // ponytail: fake progress 0→85% over ~2s, jump 100% when data lands.
-      // Google Apps Script uses chunked encoding → no Content-Length → real % impossible without backend change.
+      // fake progress — เฉพาะตอนไม่มี cache (cache path refresh เงียบ ไม่บัง UI)
       let fakePct = 0;
-      const tick = setInterval(() => {
+      const tick = cached ? null : setInterval(() => {
         fakePct += (85 - fakePct) * 0.15; // decelerate toward 85%
         fill.style.width = Math.round(fakePct) + '%';
       }, 100);
 
       try {
-        const response = await fetch(sheetUrl);
-        allData = await response.json();
-        renderContent(allData);
-        setView('grid');
+        const fresh = await fetchFreshData();
+        if (tick) clearInterval(tick);
 
-        clearInterval(tick);
+        // อัปเดตเฉพาะถ้าข้อมูลเปลี่ยน
+        if (!cached || JSON.stringify(fresh) !== JSON.stringify(cached)) {
+          allData = fresh;
+          setCachedData(fresh);
+          renderContent(allData);
+          setView('grid');
+        }
+
+        if (cached) return; // refresh เงียบเสร็จ — ไม่ต้องแสดงผลใดๆ
+
         fill.style.width = '100%';
         text.textContent = 'โหลดเสร็จ!';
         setTimeout(() => overlay.classList.remove('show'), 400);
 
       } catch (error) {
-        console.error('Error:', error);
-        clearInterval(tick);
-        overlay.classList.remove('show');
-        document.getElementById('table-body').innerHTML =
-          '<tr><td colspan="8" style="color:var(--status-deleted); text-align:center;">⚠️ เกิดข้อผิดพลาดในการโหลดข้อมูล — <a href="javascript:location.reload()" style="color:var(--link-color);">ลองใหม่</a></td></tr>';
+        if (tick) clearInterval(tick);
+
+        if (cached) {
+          console.warn('Background refresh failed, using cache:', error);
+          // เงียบ — cache ยังใช้งานได้ปกติ
+        } else {
+          console.error('Load error:', error);
+          overlay.classList.remove('show');
+          document.getElementById('table-body').innerHTML =
+            '<tr><td colspan="8" style="color:var(--status-deleted); text-align:center;">⚠️ ไม่สามารถโหลดข้อมูลได้ — <a href="javascript:location.reload()" style="color:var(--link-color);">ลองใหม่</a></td></tr>';
+        }
       }
+    }
+
+    // --- ดึงข้อมูลสดตาม source fallback chain ---
+    async function fetchFreshData() {
+      // Source 1: Sheets API v4
+      if (SHEETS_API_KEY && SHEETS_ID) {
+        try {
+          const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEETS_ID}/values/${encodeURIComponent(SHEETS_RANGE)}?key=${SHEETS_API_KEY}&majorDimension=ROWS`;
+          const resp = await tryFetch(url);
+          const json = await resp.json();
+          if (json.values && json.values.length) return json.values;
+        } catch (e) { console.warn('Sheets API failed, trying next source:', e.message); }
+      }
+
+      // Source 2: Published CSV
+      if (CSV_PUBLISH_URL) {
+        try {
+          const resp = await tryFetch(CSV_PUBLISH_URL);
+          const csvText = await resp.text();
+          const rows = parseCSV(csvText);
+          if (rows.length) return rows;
+        } catch (e) { console.warn('CSV failed, trying next source:', e.message); }
+      }
+
+      // Source 3: Apps Script (fallback)
+      const resp = await tryFetch(APPS_SCRIPT_URL);
+      return await resp.json();
     }
 
     // --- ฟังก์ชันค้นหาและกรอง ---
