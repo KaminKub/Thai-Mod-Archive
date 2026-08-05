@@ -692,6 +692,32 @@
       display: flex;
     }
 
+    .reload-btn {
+      display: none;
+      margin-top: 20px;
+      padding: 12px 28px;
+      border-radius: 10px;
+      border: 1.5px solid var(--btn-border);
+      background: var(--header-bg);
+      color: #fff;
+      font-family: 'Kanit', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .reload-btn.show {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .reload-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(10px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -983,6 +1009,7 @@
           </div>
           <div class="progress-text" id="progressText">กำลังโหลด...</div>
         </div>
+        <button class="reload-btn" id="reloadBtn" onclick="location.reload()"><i class="fa-solid fa-rotate-right"></i> ลองโหลดใหม่</button>
       </div>
     </div>
 
@@ -1204,6 +1231,7 @@
       const overlay = document.getElementById('loadingOverlay');
       const fill = document.getElementById('progressFill');
       const text = document.getElementById('progressText');
+      const reloadBtn = document.getElementById('reloadBtn');
 
       // 1. ลอง render จาก cache ก่อน — เลื่อนดูได้ทันที ไม่มี overlay บัง
       const cached = getCachedData();
@@ -1216,6 +1244,16 @@
         overlay.classList.add('show');
         fill.style.width = '0%';
         text.textContent = 'กำลังโหลด...';
+        reloadBtn.classList.remove('show');
+      }
+
+      // แสดงปุ่มลองโหลดใหม่ถ้าโหลดนานเกิน 15 วิ
+      let loadTimeout;
+      if (!cached) {
+        loadTimeout = setTimeout(() => {
+          reloadBtn.classList.add('show');
+          text.textContent = 'โหลดนานเกินไป...';
+        }, 15000);
       }
 
       // fake progress — เฉพาะตอนไม่มี cache (cache path refresh เงียบ ไม่บัง UI)
@@ -1228,6 +1266,7 @@
       try {
         const fresh = await fetchFreshData();
         if (tick) clearInterval(tick);
+        if (loadTimeout) clearTimeout(loadTimeout);
 
         // อัปเดตเฉพาะถ้าข้อมูลเปลี่ยน
         if (!cached || JSON.stringify(fresh) !== JSON.stringify(cached)) {
@@ -1241,10 +1280,12 @@
 
         fill.style.width = '100%';
         text.textContent = 'โหลดเสร็จ!';
+        reloadBtn.classList.remove('show');
         setTimeout(() => overlay.classList.remove('show'), 400);
 
       } catch (error) {
         if (tick) clearInterval(tick);
+        if (loadTimeout) clearTimeout(loadTimeout);
 
         if (cached) {
           console.warn('Background refresh failed, using cache:', error);
