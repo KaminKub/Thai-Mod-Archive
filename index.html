@@ -752,12 +752,13 @@
       :root { --grid-card-width: 220px; --grid-gap: 15px; }
       .grid-item-title { font-size: 13px; }
       .grid-item-info { padding: 12px; min-height: 150px; }
+      .grid-item-image { min-height: 200px; }
     }
 
     @media (max-width: 400px) {
       :root { --grid-card-width: 190px; }
       .grid-item { border-radius: 12px; }
-      .grid-item-image { padding: 8px; }
+      .grid-item-image { padding: 8px; min-height: 180px; }
       .grid-item-image img { max-height: 220px; }
       .grid-item-title { font-size: 12px; padding: 6px 8px; }
       .grid-item-info { padding: 10px; }
@@ -938,7 +939,7 @@
       </a>
 
       <div class="donate-wrapper">
-        <div class="header-btn donate-btn" id="donateBtn" onclick="toggleDonate()">
+        <div class="header-btn donate-btn" id="donateBtn" onclick="toggleDonate(event)">
           <img src="./mod-tracking-table_files/coffee.png" class="icon-img" alt="" width="30" height="30">
           <span class="btn-label">เลี้ยงกาแฟผม</span>
         </div>
@@ -956,9 +957,9 @@
     </div>
 
     <div class="filter-container" id="filterContainer">
-      <input type="text" id="searchInput" placeholder="🔍 ค้นหาชื่อเกม..." oninput="filterData()">
-      
-      <select id="statusFilter" onchange="filterData()">
+      <input type="text" id="searchInput" placeholder="🔍 ค้นหาชื่อเกม...">
+
+      <select id="statusFilter">
         <option value="">สถานะทั้งหมด</option>
         <option value="✅ แปลเสร็จแล้ว">แปลเสร็จแล้ว</option>
         <option value="📝 รอ Review">รอ Review</option>
@@ -1028,6 +1029,15 @@
   <script>
     let allData = []; // ตัวแปรกลางเก็บข้อมูลทั้งหมด
     const defaultIcon = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 48 48%22%3E%3Crect width=%2248%22 height=%2248%22 fill=%22%2330363d%22 rx=%228%22%2F%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 fill=%22%238b949e%22 font-family=%22sans-serif%22 font-size=%2214%22%3E🎮%3C%2Ftext%3E%3C%2Fsvg%3E';
+    const loadedSteamImages = new Set(); // กันโหลดรูปซ้ำตอน filter
+
+    function debounce(fn, delay) {
+      let timer;
+      return function(...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn.apply(this, args), delay);
+      };
+    }
 
     // === Cache & Data Source Config ===
     const CACHE_KEY = 'mod-list-v1';
@@ -1054,7 +1064,15 @@
       }
     }
 
-    function toggleDonate() { document.getElementById('donateDropdown').classList.toggle('show'); }
+    function toggleDonate(e) { e.stopPropagation(); document.getElementById('donateDropdown').classList.toggle('show'); }
+
+    document.addEventListener('click', function(e) {
+      const dd = document.getElementById('donateDropdown');
+      const btn = document.getElementById('donateBtn');
+      if (dd.classList.contains('show') && !dd.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
+        dd.classList.remove('show');
+      }
+    });
 
     function getStatusClass(status) {
       if (status.includes("เสร็จ")) return "finished";
@@ -1076,6 +1094,12 @@
       const date = new Date(dateString);
       if (isNaN(date)) return dateString;
       return `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`;
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
     }
 
     function setView(viewType) {
@@ -1116,17 +1140,23 @@
         const statusClass = getStatusClass(status);
         if(statusClass === "finished") countFinished++;
 
+        const escStatus = escapeHtml(status);
+        const escGame = escapeHtml(gameName);
+        const escTranslator = escapeHtml(translator);
+        const escDate = escapeHtml(updateDate);
+        const escNotes = escapeHtml(notes);
+
         // List View
         htmlList += `
           <tr style="animation-delay:${Math.min(i * 30, 600)}ms">
             <td class="icon-cell"><img id="icon-${i}-list" src="${defaultIcon}" loading="lazy"></td>
-            <td><span class="status-badge ${statusClass}">${status}</span></td>
-            <td><span class="game-name">${gameName}</span></td>
-            <td>${downloadUrl && downloadUrl !== '-' ? `<a href="${downloadUrl}" target="_blank" class="download-link"><i class="fa-solid fa-download"></i> ดาวน์โหลด</a>` : `<span class="download-link" style="opacity:0.5; pointer-events:none;"><i class="fa-solid fa-download"></i> ยังไม่อัพ</span>`}</td>
-            <td>${storeUrl ? `<a href="${storeUrl}" target="_blank" class="store-link"><i class="fa-brands fa-steam"></i> Steam</a>` : `-`}</td>
-            <td><span class="update-date">${updateDate}</span></td>
-            <td><span class="notes">${notes}</span></td>
-            <td><span class="translator">${translator}</span></td>
+            <td><span class="status-badge ${statusClass}">${escStatus}</span></td>
+            <td><span class="game-name">${escGame}</span></td>
+            <td>${downloadUrl && downloadUrl !== '-' ? `<a href="${downloadUrl}" target="_blank" rel="noopener" class="download-link"><i class="fa-solid fa-download"></i> ดาวน์โหลด</a>` : `<span class="download-link" style="opacity:0.5; pointer-events:none;"><i class="fa-solid fa-download"></i> ยังไม่อัพ</span>`}</td>
+            <td>${storeUrl ? `<a href="${storeUrl}" target="_blank" rel="noopener" class="store-link"><i class="fa-brands fa-steam"></i> Steam</a>` : `-`}</td>
+            <td><span class="update-date">${escDate}</span></td>
+            <td><span class="notes">${escNotes}</span></td>
+            <td><span class="translator">${escTranslator}</span></td>
           </tr>`;
 
         // Grid View
@@ -1134,18 +1164,18 @@
           <div class="grid-item" style="animation-delay:${Math.min(i * 30, 600)}ms">
             <div class="grid-item-image">
               <img id="icon-${i}-grid" src="${defaultIcon}" loading="lazy">
-              <div class="grid-item-title">${gameName}</div>
+              <div class="grid-item-title">${escGame}</div>
             </div>
             <div class="grid-item-info">
-              <div style="margin-bottom:8px;"><span class="status-badge ${statusClass}">${status}</span></div>
+              <div style="margin-bottom:8px;"><span class="status-badge ${statusClass}">${escStatus}</span></div>
               <div class="grid-item-actions">
-                ${downloadUrl && downloadUrl !== '-' ? `<a href="${downloadUrl}" target="_blank" class="grid-item-action download"><i class="fa-solid fa-download"></i> ดาวน์โหลด</a>` : ''}
-                ${storeUrl ? `<a href="${storeUrl}" target="_blank" class="grid-item-action price"><i class="fa-brands fa-steam"></i> ร้าน Steam</a>` : ''}
+                ${downloadUrl && downloadUrl !== '-' ? `<a href="${downloadUrl}" target="_blank" rel="noopener" class="grid-item-action download"><i class="fa-solid fa-download"></i> ดาวน์โหลด</a>` : ''}
+                ${storeUrl ? `<a href="${storeUrl}" target="_blank" rel="noopener" class="grid-item-action price"><i class="fa-brands fa-steam"></i> ร้าน Steam</a>` : ''}
               </div>
-              <div style="font-size:12px; color:var(--footer-text); flex-grow:1; margin-top:10px;">${notes}</div>
+              <div style="font-size:12px; color:var(--footer-text); flex-grow:1; margin-top:10px;">${escNotes}</div>
               <div style="margin-top:10px; font-size:11px; color:var(--footer-text); display:flex; gap:8px;">
-                 <span><i class="fa-solid fa-user"></i> ${translator}</span>
-                 <span><i class="fa-solid fa-calendar"></i> ${updateDate}</span>
+                 <span><i class="fa-solid fa-user"></i> ${escTranslator}</span>
+                 <span><i class="fa-solid fa-calendar"></i> ${escDate}</span>
               </div>
             </div>
           </div>`;
@@ -1160,11 +1190,12 @@
         <div class="footer-item"><span><i class="fa-solid fa-chart-simple"></i></span> ทั้งหมด: <strong>${data.length - 1}</strong></div>
         <div class="footer-item"><span><i class="fa-solid fa-circle-check" style="color: var(--status-finished);"></i></span> แปลเสร็จ: <strong>${countFinished}</strong></div>`;
 
-      // โหลดรูป Steam
+      // โหลดรูป Steam (ข้าม appId ที่โหลดแล้ว)
       data.forEach((item, index) => {
         if(index === 0) return;
         const appId = extractAppId(item[7]);
-        if (appId) {
+        if (appId && !loadedSteamImages.has(appId)) {
+          loadedSteamImages.add(appId);
           const lImg = document.getElementById(`icon-${index}-list`);
           const gImg = document.getElementById(`icon-${index}-grid`);
           if(lImg) {
@@ -1273,7 +1304,6 @@
           allData = fresh;
           setCachedData(fresh);
           renderContent(allData);
-          setView('grid');
         }
 
         if (cached) return; // refresh เงียบเสร็จ — ไม่ต้องแสดงผลใดๆ
@@ -1341,7 +1371,14 @@
       renderContent(filtered);
     }
 
-    window.addEventListener('DOMContentLoaded', loadMods);
+    window.addEventListener('DOMContentLoaded', () => {
+      loadMods();
+
+      // debounced search + filter
+      const debouncedFilter = debounce(filterData, 200);
+      document.getElementById('searchInput').addEventListener('input', debouncedFilter);
+      document.getElementById('statusFilter').addEventListener('change', filterData); // ไม่ต้อง debounce — select เปลี่ยนทีละครั้งอยู่แล้ว
+    });
 
     // Scroll collapse for sticky bar
     let lastScrollY = 0;
