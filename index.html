@@ -816,6 +816,28 @@
         padding: 10px 20px;
         font-size: 14px;
       }
+      /* Mobile grid: action buttons icon-only (fix centering when text wraps) */
+      .grid-item-actions {
+        flex-wrap: nowrap;
+        justify-content: center;
+      }
+      .grid-item-action {
+        flex: none;
+        min-width: 0;
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        font-size: 0; /* hide label text */
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+      }
+      .grid-item-action .fa-solid,
+      .grid-item-action .fa-brands {
+        font-size: 14px;
+        margin-right: 0;
+      }
     }
 
     @media (max-width: 480px) {
