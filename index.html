@@ -960,7 +960,7 @@
         <span class="btn-label">ติดตามผู้ดูแลเว็บ</span>
       </a>
 
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSfToke3znX5PJk1QfrxK5CxKSPjCKj3wByAIA8UiFSdWWXpMA/viewform" class="header-btn submit-btn" target="_blank">
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSc8GcXKuDgjlJvfaWEhU2jnalenCm0i-RxtgUe5g3UMnBu4tA/viewform" class="header-btn submit-btn" target="_blank">
         <i class="fa-solid fa-paper-plane header-fa-icon"></i>
         <span class="btn-label">ส่งม็อดมาร่วมเว็บ</span>
       </a>
@@ -1123,11 +1123,12 @@
       return match ? match[1] : null;
     }
 
+    const THAI_MONTHS_ABBR = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
     function formatDate(dateString) {
       if (!dateString || dateString === '-') return '-';
       const date = new Date(dateString);
       if (isNaN(date)) return dateString;
-      return `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`;
+      return `${date.getDate()} ${THAI_MONTHS_ABBR[date.getMonth()]} ${date.getFullYear()}`;
     }
 
     function escapeHtml(str) {
