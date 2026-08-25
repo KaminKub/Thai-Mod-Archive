@@ -1163,7 +1163,7 @@
     }
 
     // --- ฟังก์ชันหลักในการแสดงผล UI ---
-    const STATUS_SORT_PRIORITY = { finished: 0, review: 1, 'in-progress': 2, pending: 3, 'new-submission': 4, deleted: 5 };
+    const STATUS_SORT_PRIORITY = { finished: 0, 'new-submission': 1, review: 2, 'in-progress': 3, pending: 4, deleted: 5 };
 
     function renderContent(data) {
       const rows = data.slice(1).slice();
