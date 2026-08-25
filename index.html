@@ -443,6 +443,7 @@
       color: var(--link-color);
       font-size: 13px;
       font-weight: 500;
+      font-family: inherit;
       transition: all 0.2s ease;
       border: 1px solid rgba(31, 240, 255, 0.705);
     }
@@ -616,6 +617,7 @@
       border-radius: 8px;
       font-size: 12px;
       font-weight: 500;
+      font-family: inherit;
       text-decoration: none;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -661,6 +663,119 @@
 
     .grid-item-action.translator:hover {
       background: rgba(255, 255, 255, 0.1);
+      color: var(--cell-text);
+    }
+
+    #downloadPickerOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    #downloadPickerOverlay.show { display: flex; }
+
+    .download-picker-modal {
+      width: min(90vw, 420px);
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      background: var(--container-bg);
+      border: 1px solid var(--cell-border);
+      border-radius: 12px;
+      color: var(--cell-text);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    .download-picker-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--cell-border);
+    }
+
+    .download-picker-header h3 {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 600;
+    }
+
+    .download-picker-close,
+    .download-picker-cancel {
+      border: 1px solid var(--cell-border);
+      border-radius: 7px;
+      background: transparent;
+      color: var(--footer-text);
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .download-picker-close {
+      width: 32px;
+      height: 32px;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .download-picker-close:hover { color: var(--status-deleted); }
+
+    .download-picker-list {
+      max-height: 60vh;
+      overflow-y: auto;
+      padding: 8px;
+    }
+
+    .download-picker-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 10px;
+      border-radius: 8px;
+    }
+
+    .download-picker-item:hover { background: var(--cell-border); }
+
+    .download-picker-person {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .download-picker-name {
+      color: var(--cell-text);
+      font-size: 14px;
+      font-weight: 500;
+      overflow-wrap: anywhere;
+    }
+
+    .download-picker-date {
+      color: var(--footer-text);
+      font-size: 12px;
+    }
+
+    .download-picker-download-btn {
+      flex: 0 0 auto;
+      white-space: nowrap;
+    }
+
+    .download-picker-footer {
+      display: flex;
+      justify-content: center;
+      padding: 0 18px 16px;
+    }
+
+    .download-picker-cancel { padding: 8px 18px; }
+
+    .download-picker-cancel:hover {
+      background: var(--cell-border);
       color: var(--cell-text);
     }
 
@@ -843,6 +958,7 @@
       .header-btn {
         padding: 8px 14px;
       }
+      .download-picker-modal { width: 90vw; max-width: 420px; }
       .button-container {
         gap: 6px;
         padding: 6px 0 2px 0;
@@ -1059,8 +1175,22 @@
     </div>
   </div>
 
+  <div id="downloadPickerOverlay" aria-hidden="true">
+    <div class="download-picker-modal" role="dialog" aria-modal="true" aria-labelledby="downloadPickerTitle">
+      <div class="download-picker-header">
+        <h3 id="downloadPickerTitle">เลือกดาวน์โหลด</h3>
+        <button type="button" class="download-picker-close" onclick="closeDownloadPicker()" aria-label="ปิด">×</button>
+      </div>
+      <div class="download-picker-list" id="downloadPickerList"></div>
+      <div class="download-picker-footer">
+        <button type="button" class="download-picker-cancel" onclick="closeDownloadPicker()">ยกเลิก</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     let allData = []; // ตัวแปรกลางเก็บข้อมูลทั้งหมด
+    let currentModGroups = new Map();
     const defaultIcon = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 48 48%22%3E%3Crect width=%2248%22 height=%2248%22 fill=%22%2330363d%22 rx=%228%22%2F%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 fill=%22%238b949e%22 font-family=%22sans-serif%22 font-size=%2214%22%3E🎮%3C%2Ftext%3E%3C%2Fsvg%3E';
     const loadedSteamImages = new Set(); // กันโหลดรูปซ้ำตอน filter
 
@@ -1123,6 +1253,28 @@
       return match ? match[1] : null;
     }
 
+    function getModGroupKey(item) {
+      const storeUrl = item[7];
+      if (!storeUrl) return null;
+      const appId = extractAppId(storeUrl);
+      return appId || String(storeUrl).trim().toLowerCase();
+    }
+
+    // Map<key, { finishedRows: [{item, idx}], allRows: [{item, idx}] }>
+    function buildModGroups(data) {
+      const groups = new Map();
+      for (let i = 1; i < data.length; i++) {
+        const item = data[i];
+        const key = getModGroupKey(item);
+        if (!key) continue;
+        if (!groups.has(key)) groups.set(key, { finishedRows: [], allRows: [] });
+        const group = groups.get(key);
+        group.allRows.push({ item, idx: i });
+        if (getStatusClass(item[1] || '') === 'finished') group.finishedRows.push({ item, idx: i });
+      }
+      return groups;
+    }
+
     const THAI_MONTHS_ABBR = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
     function formatDate(dateString) {
       if (!dateString || dateString === '-') return '-';
@@ -1143,6 +1295,44 @@
         return (p.protocol === 'http:' || p.protocol === 'https:') ? p.href : '';
       } catch { return ''; }
     }
+
+    function closeDownloadPicker() {
+      const overlay = document.getElementById('downloadPickerOverlay');
+      overlay.classList.remove('show');
+      overlay.setAttribute('aria-hidden', 'true');
+    }
+
+    function openDownloadPicker(key) {
+      const group = currentModGroups.get(key);
+      if (!group || group.finishedRows.length < 2) return;
+
+      const primaryItem = group.finishedRows[0].item;
+      const title = document.getElementById('downloadPickerTitle');
+      const list = document.getElementById('downloadPickerList');
+      const overlay = document.getElementById('downloadPickerOverlay');
+      title.textContent = primaryItem[2] || 'เลือกดาวน์โหลด';
+      list.innerHTML = group.finishedRows.map(function(row) {
+        const item = row.item;
+        const translator = escapeHtml(item[4] || '-');
+        const translatorUrl = item[8] && item[8] !== '-' ? safeUrl(item[8]) : '';
+        const downloadUrl = item[3] && item[3] !== '-' ? safeUrl(item[3]) : '';
+        const date = escapeHtml(formatDate(item[5]));
+        const translatorHtml = translatorUrl
+          ? `<a href="${escapeHtml(translatorUrl)}" target="_blank" rel="noopener" class="download-picker-name">${translator}</a>`
+          : `<span class="download-picker-name">${translator}</span>`;
+        const downloadHtml = downloadUrl
+          ? `<a href="${escapeHtml(downloadUrl)}" target="_blank" rel="noopener" class="download-link download-picker-download-btn"><i class="fa-solid fa-download"></i> ดาวน์โหลด</a>`
+          : `<span class="download-link download-picker-download-btn" style="opacity:0.5; pointer-events:none;"><i class="fa-solid fa-download"></i> ยังไม่อัพ</span>`;
+        return `<div class="download-picker-item"><div class="download-picker-person">${translatorHtml}<span class="download-picker-date">${date}</span></div>${downloadHtml}</div>`;
+      }).join('');
+      overlay.classList.add('show');
+      overlay.setAttribute('aria-hidden', 'false');
+    }
+
+    document.addEventListener('click', function(event) {
+      const overlay = document.getElementById('downloadPickerOverlay');
+      if (overlay.classList.contains('show') && event.target === overlay) closeDownloadPicker();
+    });
 
     function setView(viewType) {
       const listViewBtn = document.getElementById('listViewBtn');
@@ -1174,6 +1364,7 @@
         return pa - pb;
       });
       data = [data[0], ...rows];
+      currentModGroups = buildModGroups(data);
 
       let htmlList = '';
       let htmlGrid = '';
@@ -1194,6 +1385,13 @@
         if(statusClass === "finished") countFinished++;
         if(translator && translator !== '-') translatorSet.add(translator);
 
+        const groupKey = getModGroupKey(item);
+        const group = groupKey ? currentModGroups.get(groupKey) : null;
+        const isMergedGroup = group && group.finishedRows.length >= 2;
+        const isPrimaryMergedRow = isMergedGroup && i === group.finishedRows[0].idx;
+        const isSecondaryFinishedRow = isMergedGroup && statusClass === 'finished' && !isPrimaryMergedRow;
+        if (isSecondaryFinishedRow) continue;
+
         const translatorUrl = item[8] && item[8] !== '-' ? safeUrl(item[8]) : '';
 
         const escStatus = escapeHtml(status);
@@ -1204,6 +1402,24 @@
         const translatorHtml = translatorUrl
           ? `<a href="${escapeHtml(translatorUrl)}" target="_blank" rel="noopener" class="translator" style="text-decoration:underline;">${escTranslator}</a>`
           : `<span class="translator">${escTranslator}</span>`;
+        const mergedTranslatorLabel = isPrimaryMergedRow
+          ? group.finishedRows.slice(0, 3).map(function(row) {
+              const name = escapeHtml(row.item[4] || '-');
+              const creditUrl = row.item[8] && row.item[8] !== '-' ? safeUrl(row.item[8]) : '';
+              return creditUrl
+                ? `<a href="${escapeHtml(creditUrl)}" target="_blank" rel="noopener" class="translator" style="text-decoration:underline;">${name}</a>`
+                : `<span class="translator">${name}</span>`;
+            }).join(', ') + (group.finishedRows.length > 3 ? ` +${group.finishedRows.length - 3} คน` : '')
+          : '';
+        const displayTranslatorHtml = isPrimaryMergedRow
+          ? mergedTranslatorLabel
+          : translatorHtml;
+        const downloadPickerButton = isPrimaryMergedRow
+          ? `<button type="button" class="download-link" data-download-picker-key="${escapeHtml(groupKey)}" onclick="openDownloadPicker(this.dataset.downloadPickerKey)"><i class="fa-solid fa-download"></i> ดาวน์โหลด</button>`
+          : '';
+        const gridDownloadPickerButton = isPrimaryMergedRow
+          ? `<button type="button" class="grid-item-action download" data-download-picker-key="${escapeHtml(groupKey)}" onclick="openDownloadPicker(this.dataset.downloadPickerKey)"><i class="fa-solid fa-download"></i> ดาวน์โหลด</button>`
+          : '';
 
         // List View
         htmlList += `
@@ -1211,11 +1427,11 @@
             <td class="icon-cell"><img id="icon-${i}-list" src="${defaultIcon}" loading="lazy"></td>
             <td><span class="status-badge ${statusClass}">${escStatus}</span></td>
             <td><span class="game-name">${escGame}</span></td>
-            <td>${downloadUrl ? `<a href="${escapeHtml(downloadUrl)}" target="_blank" rel="noopener" class="download-link"><i class="fa-solid fa-download"></i> ดาวน์โหลด</a>` : `<span class="download-link" style="opacity:0.5; pointer-events:none;"><i class="fa-solid fa-download"></i> ยังไม่อัพ</span>`}</td>
+            <td>${downloadPickerButton || (downloadUrl ? `<a href="${escapeHtml(downloadUrl)}" target="_blank" rel="noopener" class="download-link"><i class="fa-solid fa-download"></i> ดาวน์โหลด</a>` : `<span class="download-link" style="opacity:0.5; pointer-events:none;"><i class="fa-solid fa-download"></i> ยังไม่อัพ</span>`)}</td>
             <td>${storeUrl ? `<a href="${escapeHtml(storeUrl)}" target="_blank" rel="noopener" class="store-link"><i class="fa-brands fa-steam"></i> Steam</a>` : `-`}</td>
             <td><span class="update-date">${escDate}</span></td>
             <td><span class="notes">${escNotes}</span></td>
-            <td>${translatorHtml}</td>
+            <td>${displayTranslatorHtml}</td>
           </tr>`;
 
         // Grid View
@@ -1228,12 +1444,12 @@
             <div class="grid-item-info">
               <div style="margin-bottom:8px;"><span class="status-badge ${statusClass}">${escStatus}</span></div>
               <div class="grid-item-actions">
-                ${downloadUrl ? `<a href="${escapeHtml(downloadUrl)}" target="_blank" rel="noopener" class="grid-item-action download"><i class="fa-solid fa-download"></i> ดาวน์โหลด</a>` : ''}
+                ${gridDownloadPickerButton || (downloadUrl ? `<a href="${escapeHtml(downloadUrl)}" target="_blank" rel="noopener" class="grid-item-action download"><i class="fa-solid fa-download"></i> ดาวน์โหลด</a>` : '')}
                 ${storeUrl ? `<a href="${escapeHtml(storeUrl)}" target="_blank" rel="noopener" class="grid-item-action price"><i class="fa-brands fa-steam"></i> ร้าน Steam</a>` : ''}
               </div>
               <div style="font-size:12px; color:var(--footer-text); flex-grow:1; margin-top:10px;">${escNotes}</div>
               <div style="margin-top:10px; font-size:11px; color:var(--footer-text); display:flex; gap:8px;">
-                 <span><i class="fa-solid fa-user"></i> ${translatorHtml}</span>
+                 <span><i class="fa-solid fa-user"></i> ${displayTranslatorHtml}</span>
                  <span><i class="fa-solid fa-calendar"></i> ${escDate}</span>
               </div>
             </div>
