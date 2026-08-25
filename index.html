@@ -1193,7 +1193,7 @@
         if(statusClass === "finished") countFinished++;
         if(translator && translator !== '-') translatorSet.add(translator);
 
-        const translatorUrl = safeUrl(item[8] || '');
+        const translatorUrl = item[8] && item[8] !== '-' ? safeUrl(item[8]) : '';
 
         const escStatus = escapeHtml(status);
         const escGame = escapeHtml(gameName);
