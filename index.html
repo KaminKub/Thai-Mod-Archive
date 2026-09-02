@@ -1192,7 +1192,6 @@
     let allData = []; // ตัวแปรกลางเก็บข้อมูลทั้งหมด
     let currentModGroups = new Map();
     const defaultIcon = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 48 48%22%3E%3Crect width=%2248%22 height=%2248%22 fill=%22%2330363d%22 rx=%228%22%2F%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 fill=%22%238b949e%22 font-family=%22sans-serif%22 font-size=%2214%22%3E🎮%3C%2Ftext%3E%3C%2Fsvg%3E';
-    const loadedSteamImages = new Set(); // กันโหลดรูปซ้ำตอน filter
 
     function debounce(fn, delay) {
       let timer;
@@ -1466,12 +1465,12 @@
         <div class="footer-item"><span><i class="fa-solid fa-circle-check" style="color: var(--status-finished);"></i></span> แปลเสร็จ: <strong>${countFinished}</strong></div>
         <div class="footer-item"><span><i class="fa-solid fa-users"></i></span> นักแปล: <strong>${translatorSet.size}</strong></div>`;
 
-      // โหลดรูป Steam (ข้าม appId ที่โหลดแล้ว)
+      // โหลดรูป Steam ให้กับแท็ก <img> ที่เพิ่งสร้างในทุกครั้งที่ render
+      // เบราว์เซอร์จะใช้ HTTP cache สำหรับ URL เดิมเอง
       data.forEach((item, index) => {
         if(index === 0) return;
         const appId = extractAppId(item[7]);
-        if (appId && !loadedSteamImages.has(appId)) {
-          loadedSteamImages.add(appId);
+        if (appId) {
           const lImg = document.getElementById(`icon-${index}-list`);
           const gImg = document.getElementById(`icon-${index}-grid`);
           if(lImg) {
