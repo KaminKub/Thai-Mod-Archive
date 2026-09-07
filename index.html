@@ -344,7 +344,8 @@
     }
 
     #statusFilter,
-    #translatorFilter {
+    #translatorFilter,
+    #sortFilter {
       padding: 10px 16px;
       border-radius: 8px;
       border: 1px solid var(--cell-border);
@@ -357,7 +358,8 @@
     }
 
     #statusFilter:focus,
-    #translatorFilter:focus {
+    #translatorFilter:focus,
+    #sortFilter:focus {
       border-color: var(--link-color);
     }
 
@@ -940,7 +942,8 @@
         font-size: 13px;
       }
       #statusFilter,
-      #translatorFilter {
+      #translatorFilter,
+      #sortFilter {
         min-width: 140px;
         padding: 8px 12px;
         font-size: 13px;
@@ -972,7 +975,8 @@
         min-width: 100%;
       }
       #statusFilter,
-      #translatorFilter {
+      #translatorFilter,
+      #sortFilter {
         min-width: 100%;
       }
       .view-toggle-container {
@@ -1113,6 +1117,13 @@
 
       <select id="translatorFilter">
         <option value="">ผู้แปลทั้งหมด</option>
+      </select>
+
+      <select id="sortFilter">
+        <option value="date-desc">🕒 ใหม่ → เก่า</option>
+        <option value="date-asc">🕒 เก่า → ใหม่</option>
+        <option value="name-asc">🔤 ชื่อเกม A → Z</option>
+        <option value="name-desc">🔤 ชื่อเกม Z → A</option>
       </select>
     </div>
     </div>
@@ -1355,12 +1366,31 @@
     // --- ฟังก์ชันหลักในการแสดงผล UI ---
     const STATUS_SORT_PRIORITY = { finished: 0, 'new-submission': 1, review: 2, 'in-progress': 3, pending: 4, deleted: 5 };
 
+    // ตัวเรียงลำดับรอง — ใช้ตัดสินภายในกลุ่มสถานะเดียวกัน
+    function getSortComparator() {
+      const select = document.getElementById('sortFilter');
+      const mode = select ? select.value : 'date-desc';
+      return (a, b) => {
+        if (mode === 'name-asc' || mode === 'name-desc') {
+          const cmp = String(a[2] || '').localeCompare(String(b[2] || ''), 'th');
+          return mode === 'name-asc' ? cmp : -cmp;
+        }
+        const ta = Date.parse(a[5]);
+        const tb = Date.parse(b[5]);
+        if (isNaN(ta) && isNaN(tb)) return 0;
+        if (isNaN(ta)) return 1;  // ไม่มีวันที่ → ไปท้ายกลุ่มเสมอ
+        if (isNaN(tb)) return -1;
+        return mode === 'date-asc' ? ta - tb : tb - ta;
+      };
+    }
+
     function renderContent(data) {
       const rows = data.slice(1).slice();
+      const sortFn = getSortComparator();
       rows.sort((a, b) => {
         const pa = STATUS_SORT_PRIORITY[getStatusClass(a[1] || '')] ?? 5;
         const pb = STATUS_SORT_PRIORITY[getStatusClass(b[1] || '')] ?? 5;
-        return pa - pb;
+        return (pa - pb) || sortFn(a, b);
       });
       data = [data[0], ...rows];
       currentModGroups = buildModGroups(data);
@@ -1671,6 +1701,7 @@
       document.getElementById('searchInput').addEventListener('input', debouncedFilter);
       document.getElementById('statusFilter').addEventListener('change', filterData); // ไม่ต้อง debounce — select เปลี่ยนทีละครั้งอยู่แล้ว
       document.getElementById('translatorFilter').addEventListener('change', filterData);
+      document.getElementById('sortFilter').addEventListener('change', filterData);
     });
 
     // Scroll collapse for sticky bar
