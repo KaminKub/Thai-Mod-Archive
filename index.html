@@ -1120,6 +1120,7 @@
       </select>
 
       <select id="sortFilter">
+        <option value="sheet">ลำดับเริ่มต้น</option>
         <option value="date-desc">อัปเดตใหม่ → เก่า</option>
         <option value="date-asc">อัปเดตเก่า → ใหม่</option>
         <option value="name-asc">ชื่อเกม A → Z</option>
@@ -1397,8 +1398,9 @@
     // ตัวเรียงลำดับรอง — ใช้ตัดสินภายในกลุ่มสถานะเดียวกัน
     function getSortComparator() {
       const select = document.getElementById('sortFilter');
-      const mode = select ? select.value : 'date-desc';
+      const mode = select ? select.value : 'sheet';
       return (a, b) => {
+        if (mode === 'sheet') return 0; // คงลำดับเดิมจากชีต — Array.sort() เสถียรตาม ES2019
         if (mode === 'name-asc' || mode === 'name-desc') {
           const cmp = String(a[2] || '').localeCompare(String(b[2] || ''), 'th');
           return mode === 'name-asc' ? cmp : -cmp;
