@@ -363,6 +363,32 @@
       border-color: var(--link-color);
     }
 
+    /* ไอคอนนำหน้าช่องกรอง — <option>/placeholder ใส่ HTML ไม่ได้ จึงวางซ้อนด้านซ้ายแทน */
+    .filter-field {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .filter-icon {
+      position: absolute;
+      left: 14px;
+      font-size: 14px;
+      line-height: 1;
+      pointer-events: none; /* คลิกทะลุไปโดนช่องด้านหลัง */
+      z-index: 1;
+    }
+
+    .filter-field #searchInput,
+    .filter-field select {
+      padding-left: 38px; /* เว้นที่ให้ไอคอน กันสระ/วรรณยุกต์ไทยทับ */
+    }
+
+    .filter-icon.fa-magnifying-glass { color: #4fc3f7; }
+    .filter-icon.fa-filter { color: #ba68c8; }
+    .filter-icon.fa-user { color: #ffb74d; }
+    .filter-icon.fa-arrow-down-wide-short { color: #4dd0e1; }
+
     .table-container {
       overflow-x: auto;
       padding: 20px;
@@ -948,6 +974,14 @@
         padding: 8px 12px;
         font-size: 13px;
       }
+      .filter-icon {
+        left: 11px;
+        font-size: 13px;
+      }
+      .filter-field #searchInput,
+      .filter-field select {
+        padding-left: 32px;
+      }
       .view-toggle-container {
         padding: 4px 0 8px 0;
       }
@@ -970,6 +1004,9 @@
         flex-direction: column;
         align-items: stretch;
         padding: 4px 8px 8px 8px;
+      }
+      .filter-field {
+        width: 100%;
       }
       #searchInput {
         min-width: 100%;
@@ -1104,28 +1141,40 @@
     </div>
 
     <div class="filter-container" id="filterContainer">
-      <input type="text" id="searchInput" placeholder="ค้นหาชื่อเกม...">
+      <div class="filter-field">
+        <i class="fa-solid fa-magnifying-glass filter-icon" aria-hidden="true"></i>
+        <input type="text" id="searchInput" placeholder="ค้นหาชื่อเกม..." aria-label="ค้นหาชื่อเกม">
+      </div>
 
-      <select id="statusFilter">
-        <option value="">สถานะทั้งหมด</option>
-        <option value="✅ แปลเสร็จแล้ว">แปลเสร็จแล้ว</option>
-        <option value="📝 รอ Review">รอ Review</option>
-        <option value="🔄 กำลังแปล">กำลังแปล</option>
-        <option value="📋 รอแปล">รอแปล</option>
-        <option value="🔍 รอตรวจสอบ">รอตรวจสอบ</option>
-      </select>
+      <div class="filter-field">
+        <i class="fa-solid fa-filter filter-icon" aria-hidden="true"></i>
+        <select id="statusFilter" aria-label="กรองตามสถานะแปล">
+          <option value="">สถานะทั้งหมด</option>
+          <option value="✅ แปลเสร็จแล้ว">แปลเสร็จแล้ว</option>
+          <option value="📝 รอ Review">รอ Review</option>
+          <option value="🔄 กำลังแปล">กำลังแปล</option>
+          <option value="📋 รอแปล">รอแปล</option>
+          <option value="🔍 รอตรวจสอบ">รอตรวจสอบ</option>
+        </select>
+      </div>
 
-      <select id="translatorFilter">
-        <option value="">ผู้แปลทั้งหมด</option>
-      </select>
+      <div class="filter-field">
+        <i class="fa-solid fa-user filter-icon" aria-hidden="true"></i>
+        <select id="translatorFilter" aria-label="กรองตามผู้แปล">
+          <option value="">ผู้แปลทั้งหมด</option>
+        </select>
+      </div>
 
-      <select id="sortFilter">
-        <option value="sheet">ลำดับเริ่มต้น</option>
-        <option value="date-desc">อัปเดตใหม่ → เก่า</option>
-        <option value="date-asc">อัปเดตเก่า → ใหม่</option>
-        <option value="name-asc">ชื่อเกม A → Z</option>
-        <option value="name-desc">ชื่อเกม Z → A</option>
-      </select>
+      <div class="filter-field">
+        <i class="fa-solid fa-arrow-down-wide-short filter-icon" aria-hidden="true"></i>
+        <select id="sortFilter" aria-label="เรียงลำดับรายการ">
+          <option value="sheet">ลำดับเริ่มต้น</option>
+          <option value="date-desc">อัปเดตใหม่ → เก่า</option>
+          <option value="date-asc">อัปเดตเก่า → ใหม่</option>
+          <option value="name-asc">ชื่อเกม A → Z</option>
+          <option value="name-desc">ชื่อเกม Z → A</option>
+        </select>
+      </div>
     </div>
     </div>
 
