@@ -1104,7 +1104,7 @@
     </div>
 
     <div class="filter-container" id="filterContainer">
-      <input type="text" id="searchInput" placeholder="🔍 ค้นหาชื่อเกม...">
+      <input type="text" id="searchInput" placeholder="ค้นหาชื่อเกม...">
 
       <select id="statusFilter">
         <option value="">สถานะทั้งหมด</option>
@@ -1221,7 +1221,9 @@
     const SHEETS_API_KEY = 'AIzaSyAMIFUAcy4mwUKZxuPoAbUnG9qnsjQ8Fzk';  // ใส่ API key จาก Google Cloud Console
     const SHEETS_ID = '1gfeoBr5SY5yyzJIRDElJ03rN_o-snOh6T7pZQmqSZXs';  // spreadsheet ID (เอามาจาก URL ของ sheet)
     const SHEETS_RANGE = 'mod-tracking-csv!A1:I'; // range ที่ต้องการ
-    const CSV_PUBLISH_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT7bYelaGENVAeNnQVV0GYZ0_GYboL_ZoLOuEYU3k8MSzpVYqVVhvocabZXZI7SdvxMXMCZF_2Pq17u/pub?gid=1409791797&single=true&output=csv'; // URL จาก File → Share → Publish to web → CSV
+    // gviz endpoint — อ่านชีตที่แชร์แบบ "ทุกคนที่มีลิงก์" ได้เลย ไม่ต้อง Publish to web
+    // (URL แบบ /pub?output=csv เดิมเด้งไปหน้า login ทำให้ fallback ชั้นนี้ใช้ไม่ได้)
+    const CSV_PUBLISH_URL = `https://docs.google.com/spreadsheets/d/${SHEETS_ID}/gviz/tq?tqx=out:csv&gid=1409791797&tq=${encodeURIComponent('select A,B,C,D,E,F,G,H,I')}`;
     // Apps Script URL (fallback สุดท้าย — source ปัจจุบัน)
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz_aw9IF7u9D-2G5q8ppHT_K-kNRhO4HTXWUEU5PGOz-7uDAn2OmVmiS6MZGiFd2duh/exec';
 
