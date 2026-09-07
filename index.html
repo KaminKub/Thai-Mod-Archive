@@ -379,8 +379,11 @@
       z-index: 1;
     }
 
+    /* ต้องระบุด้วย id ทุกตัว — กฎ padding ด้านบนใช้ id จึงมี specificity สูงกว่า .filter-field select */
     .filter-field #searchInput,
-    .filter-field select {
+    .filter-field #statusFilter,
+    .filter-field #translatorFilter,
+    .filter-field #sortFilter {
       padding-left: 38px; /* เว้นที่ให้ไอคอน กันสระ/วรรณยุกต์ไทยทับ */
     }
 
@@ -979,7 +982,9 @@
         font-size: 13px;
       }
       .filter-field #searchInput,
-      .filter-field select {
+      .filter-field #statusFilter,
+      .filter-field #translatorFilter,
+      .filter-field #sortFilter {
         padding-left: 32px;
       }
       .view-toggle-container {
