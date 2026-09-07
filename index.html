@@ -1120,10 +1120,10 @@
       </select>
 
       <select id="sortFilter">
-        <option value="date-desc">🕒 ใหม่ → เก่า</option>
-        <option value="date-asc">🕒 เก่า → ใหม่</option>
-        <option value="name-asc">🔤 ชื่อเกม A → Z</option>
-        <option value="name-desc">🔤 ชื่อเกม Z → A</option>
+        <option value="date-desc">อัปเดตใหม่ → เก่า</option>
+        <option value="date-asc">อัปเดตเก่า → ใหม่</option>
+        <option value="name-asc">ชื่อเกม A → Z</option>
+        <option value="name-desc">ชื่อเกม Z → A</option>
       </select>
     </div>
     </div>
@@ -1286,10 +1286,36 @@
     }
 
     const THAI_MONTHS_ABBR = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+    const THAI_MONTHS_FULL = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
+
+    // อ่านวันที่จากชีตได้ทั้งแบบไทย ("26 ส.ค. 2026", "26 สิงหาคม 2569") และ ISO ("2026-08-27")
+    // คืน Date หรือ null ถ้าอ่านไม่ได้ — Date.parse() เดี่ยว ๆ อ่านรูปแบบไทยไม่ออก
+    function parseDate(dateString) {
+      if (!dateString || dateString === '-') return null;
+      const str = String(dateString).trim();
+
+      const thai = str.match(/^(\d{1,2})\s+(\S+)\s+(\d{4})$/);
+      if (thai) {
+        let monthIdx = THAI_MONTHS_ABBR.indexOf(thai[2]);
+        if (monthIdx === -1) monthIdx = THAI_MONTHS_FULL.indexOf(thai[2]);
+        if (monthIdx !== -1) {
+          let year = Number(thai[3]);
+          if (year > 2400) year -= 543; // พ.ศ. → ค.ศ.
+          return new Date(year, monthIdx, Number(thai[1]));
+        }
+      }
+
+      // ISO — สร้างเป็นเวลาท้องถิ่น กัน new Date() ตีเป็น UTC แล้ววันเพี้ยน
+      const iso = str.match(/^(\d{4})-(\d{2})-(\d{2})/);
+      if (iso) return new Date(Number(iso[1]), Number(iso[2]) - 1, Number(iso[3]));
+
+      const fallback = new Date(str);
+      return isNaN(fallback) ? null : fallback;
+    }
+
     function formatDate(dateString) {
-      if (!dateString || dateString === '-') return '-';
-      const date = new Date(dateString);
-      if (isNaN(date)) return dateString;
+      const date = parseDate(dateString);
+      if (!date) return dateString && dateString !== '-' ? String(dateString) : '-';
       return `${date.getDate()} ${THAI_MONTHS_ABBR[date.getMonth()]} ${date.getFullYear()}`;
     }
 
@@ -1375,12 +1401,12 @@
           const cmp = String(a[2] || '').localeCompare(String(b[2] || ''), 'th');
           return mode === 'name-asc' ? cmp : -cmp;
         }
-        const ta = Date.parse(a[5]);
-        const tb = Date.parse(b[5]);
-        if (isNaN(ta) && isNaN(tb)) return 0;
-        if (isNaN(ta)) return 1;  // ไม่มีวันที่ → ไปท้ายกลุ่มเสมอ
-        if (isNaN(tb)) return -1;
-        return mode === 'date-asc' ? ta - tb : tb - ta;
+        const da = parseDate(a[5]);
+        const db = parseDate(b[5]);
+        if (!da && !db) return 0;
+        if (!da) return 1;  // ไม่มีวันที่ → ไปท้ายกลุ่มเสมอ
+        if (!db) return -1;
+        return mode === 'date-asc' ? da - db : db - da;
       };
     }
 
